@@ -1,0 +1,25 @@
+.paginationButtom{
+    border:1px solid black;
+    width:40px;
+    font-weight: 600;
+    font-size:19px;
+    padding:5px 10px;
+    display:flex;
+    align-items:center;
+    justify-content: center;
+    text-align: center;
+    &:hover{
+        cursor: pointer;
+    }
+    &:disabled{
+        cursor:no-drop;
+        border:1px solid transparent;
+        color:gray !important;
+    }
+}
+.pageInput{
+    border:1px solid #727BB5 !important;
+}
+.select{
+    width:150px;
+}

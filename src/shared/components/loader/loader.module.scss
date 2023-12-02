@@ -1,0 +1,15 @@
+.loader {
+  position: absolute;
+  top: 0;
+  left: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+  width: 100%;
+  background-color: #F8F8F9;
+  z-index: 10;
+  &--blur{
+    background-color: rgba(248, 248, 249, 0.5);
+  }
+}

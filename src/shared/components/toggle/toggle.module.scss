@@ -1,0 +1,27 @@
+.toggle {
+  display: flex;
+  height: 32px;
+  width:75px;
+  justify-content: space-between;
+  border-radius: 20px;
+  overflow: hidden;
+  background: #D6DAF4;
+  padding: 5px;
+  &--disabled {
+    opacity: 0.3;
+  }
+  &__button {
+    background-color: transparent;
+    border: none;
+    padding: 3px 12px;
+
+    &--active {
+      background-color: #1B2561;
+      border-radius: 20px;
+    }
+    &--disable{
+      background-color: #F8F8F9;
+      border-radius: 20px;
+    }
+  }
+}

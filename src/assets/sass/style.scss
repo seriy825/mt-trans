@@ -1,0 +1,48 @@
+@import 'bootstrap/dist/css/bootstrap.min.css';
+*,
+*:after,
+*:before {
+  box-sizing: border-box;
+  padding: 0;
+  margin: 0;  
+}
+
+html {
+  font-family: sans-serif;
+  text-size-adjust: 100%;
+}
+
+html,
+body {
+  height: 100%;
+  margin: 0px;
+  padding: 0px;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+body {  
+  a:hover,
+  a:active,
+  a:focus {
+    text-decoration: none !important;
+  }
+}
+
+// Angular integration
+router-outlet {
+  display: none;
+}
+
+#root{
+  background: linear-gradient(to bottom right, blue, pink);
+  height: 100%;
+}
+
+.pac-container{
+  display:none !important;
+}
+
+.dropdown-toggle::after {
+  display: none !important; 
+}

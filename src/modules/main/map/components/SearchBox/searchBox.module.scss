@@ -1,0 +1,96 @@
+.searchBoxWrapper {
+  position: absolute;
+  z-index: 1;  
+  top: 12px;
+  display: flex;
+  flex-direction: column;
+  left: 15px;
+  background-color: rgb(29, 31, 31);
+  padding: 5px 5px;
+  min-width: 250px;
+  width: 25%;
+  border-radius:16px;
+  font-size: 14px;
+  outline: none;
+  text-overflow: ellipsis;
+}
+
+.searchBox {
+  display: flex;
+  gap: 15px;
+}
+
+.searchList {
+  color: white;
+  max-height: 500px;
+  overflow: auto;
+  &::-webkit-scrollbar {
+    width: 5px;
+  }
+  
+  /* Track */
+  &::-webkit-scrollbar-track {
+    background: #f1f1f1;
+  }
+  
+  /* Handle */
+  &::-webkit-scrollbar-thumb {
+    background: #888;
+  }
+  
+  /* Handle on hover */
+  &::-webkit-scrollbar-thumb:hover {
+    background: #555;
+  }
+}
+
+.driverCard{
+    width:100%;
+    padding:10px 15px;
+    display:flex;
+    flex-direction: row;
+    justify-content: space-between;
+    border-bottom: 1px solid gray;
+    &--actions{
+        display:flex;
+        flex-direction: column;
+        justify-content: space-between;
+        align-items: center;
+        gap:5px;
+    }
+}
+
+.type{
+  &--large{
+    font-weight: 500;
+    border-radius: 6px;
+    padding:5px 10px;
+    background-color: rgb(255, 251, 0);
+    color:rgb(150, 102, 15)
+  }
+  &--boxtruck{
+    font-weight: 500;
+    border-radius: 6px;
+    padding:5px 10px;
+    background-color: rgb(106, 255, 47);
+    color:rgb(12, 100, 49)
+  }
+  &--sprinter{
+    font-weight: 500;
+    border-radius: 6px;
+    padding:5px 10px;
+    background-color: rgb(121, 241, 250);
+    color:rgb(62, 88, 233)
+  }
+}
+
+@keyframes glowing {
+  0% { background-color: #58151c; box-shadow: 0 0 5px #58151c; }
+  50% { background-color: #ce1d2e; box-shadow: 0 0 20px #ce1d2e; }
+  100% { background-color: #58151c; box-shadow: 0 0 5px #58151c; }
+  }
+  .available {
+    padding:3px 7px;
+    border-radius: 6px;
+    animation: glowing 1300ms infinite;
+  }

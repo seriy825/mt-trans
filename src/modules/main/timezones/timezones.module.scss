@@ -1,0 +1,11 @@
+.timezones{
+    padding:10px 25px;
+    &--header{
+        color:#fff;
+    }
+    &--time{
+        color:#fff;
+        display:flex;
+        flex-direction: column;
+    }
+}

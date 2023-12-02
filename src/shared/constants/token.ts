@@ -1,0 +1,1 @@
+export const GMAP_TOKEN = process.env.REACT_APP_GOOGLE_MAP_API_TOKEN

@@ -1,0 +1,137 @@
+.btn {
+  border-radius: 30px;
+  border: none;
+  padding: 10px 16px;
+  font-weight: 600;
+  font-size: 16px;
+  transition: all 0.3s ease-out;
+  min-width: 142px;
+
+  &:hover {
+    box-shadow: 0px 8px 15px 0px rgba(0, 0, 0, 0.08) !important;
+  }
+
+  &:disabled {
+    opacity: 0.3;
+  }
+
+  &--main {
+    background-color: #D4AFFA;
+    color: #212e48;
+
+    &:active {
+      background-color: #BF97E9;
+      box-shadow: none !important;
+    }
+  }
+
+  &--secondary {
+    background-color: #E9ECFE;
+    color: #5B649F;
+
+    &:active {
+      background-color: #D6DAF4;
+      box-shadow: none !important;
+    }
+  }
+
+  &--text {
+    background-color: transparent;
+    margin:0;
+    padding:0;
+    min-width: auto;
+    &:hover {
+      box-shadow: none !important;
+      opacity: 0.8;
+    }
+
+    &:active {
+      background-color: transparent;
+      box-shadow: none !important;
+    }
+  }
+
+  &--small {
+    min-width: 72px;
+  }
+
+  &--remove {
+    background-color: #ED4343;
+    color: #fff;
+  }
+
+  &--navbar {
+    background-color: transparent;
+    border-radius: 8px !important;
+    min-width: 72px;
+
+    &:hover, &:active{
+      box-shadow: none !important;
+      background-color: #FAFAFF;
+    }
+
+    @media (max-width:576px){
+      min-width:auto;
+      span {
+        display:block !important;
+      }
+      span > span:nth-child(2) {
+        display:none !important;
+      }
+    }
+  }
+}
+
+.link {
+  border-radius: 30px;
+  border: none;
+  padding: 10px 16px;
+  font-weight: 600;
+  font-size: 16px;
+  transition: all 0.3s ease-out;
+  color:#5B649F;
+  margin: 0;
+  text-align: center;
+
+
+  &--secondary {
+    background-color: #E9ECFE;
+    color: #5B649F;
+    min-width: 142px;
+
+    &:active {
+      background-color: #D6DAF4;
+      box-shadow: none !important;
+    }
+
+    &:hover {
+      box-shadow: 0px 8px 15px 0px rgba(0, 0, 0, 0.08) !important;
+    }
+  }
+
+  &--tertiary {
+    font-size: 14px;
+    font-weight: 400;
+    color: #1B2561;
+    padding: 0 16px;
+  }
+
+  &--purple {
+    background-color: #D4AFFA;
+    color: #0A1031;
+    min-width: 142px;
+
+    &:active {
+      background-color: #BF97E9;
+      box-shadow: none !important;
+    }
+  }
+
+  &:hover {
+    opacity: 0.7;
+  }
+
+  &:disabled {
+    opacity: 0.3;
+  }
+}
