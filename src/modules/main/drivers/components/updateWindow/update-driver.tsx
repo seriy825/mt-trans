@@ -64,7 +64,7 @@ const CreateOrUpdateDriverComponent: React.FC<
     formik.setFieldValue('active', !formik.values.active)
   }
   const onDateChange = (event) => {
-    formik.setFieldValue('dateAvailable', new Date(event.target.value).toLocaleDateString('en-US',{hour:'2-digit',minute:'2-digit'}))
+    formik.setFieldValue('dateAvailable', new Date(event.target.value))
   }
   return (
     <Offcanvas show={isVisible} onHide={onHide} placement='end'>
