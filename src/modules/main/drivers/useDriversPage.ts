@@ -8,6 +8,7 @@ import {useMutation} from 'react-query'
 import {toast} from 'react-toastify'
 import {IDriver} from 'shared/types/api-types/driver'
 import {driverSchema} from './schema/driver-schema'
+import moment from 'moment'
 
 export const useDriversPage = () => {
   const drivers = selectDrivers()
@@ -58,6 +59,8 @@ export const useDriversPage = () => {
   >(DriverApi.deleteDriver, {
     onSuccess: (data: void, id: number) => {
       setIsEditMode(false)
+      setEditableDriver(null)
+      setUpdatingActiveStatusDriverId(null)
       deleteDriver(id)
       toast.success('Driver was deleted successfully!')
     },
@@ -71,7 +74,7 @@ export const useDriversPage = () => {
     active: editableDriver?.active ? editableDriver.active : false,
     dateAvailable: editableDriver?.dateAvailable
       ? editableDriver.dateAvailable
-      : null,
+      : `${new Date()}`,
     id: editableDriver?.id ? editableDriver.id : null,
     name: editableDriver?.name ? editableDriver.name : '',
     owner: editableDriver?.owner ? editableDriver.owner : '',
@@ -120,12 +123,13 @@ export const useDriversPage = () => {
   }
   const handleCloseEdit = () => {
     setEditableDriver(null)
+    setUpdatingActiveStatusDriverId(null)
     formik.resetForm()
     setIsEditMode(false)
     setIsCreateMode(false)
   }
 
-  const handleDeleteClick = () => {
+  const handleDeleteClick = () => {    
     deleteDriverMutation.mutate(editableDriver.id)
   }
 

@@ -17,7 +17,7 @@ export const driverSchema = (drivers:IDriver[],isCreateMode:boolean) => Yup.obje
   home:Yup.string().nullable(),
   note:Yup.string().nullable(),
   owner:Yup.string().nullable(),
-  phone:Yup.string().required('Phone is required'),
+  phone:Yup.string().nullable(),
   typeCar:Yup.string().required('Type car is required'),
   zipCode:Yup.string().required('Zip code is required'),
   dimension:Yup.string().required('Dimension is required'),

@@ -30,7 +30,7 @@ const DriversTableComponent: React.FC<IDriversTableComponent> = (
     if (!globalFilter) return drivers
     return drivers.filter(
       (driver) =>
-        driver.id.toString() === globalFilter || driver.name === globalFilter
+        driver.id.toString().includes(globalFilter.toLowerCase()) || driver.name.toLowerCase().includes(globalFilter.toLowerCase())
     )
   }, [drivers, globalFilter])
   return (

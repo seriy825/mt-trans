@@ -37,6 +37,8 @@ const STATUS_OPTIONS: IOption[] = [
   {value: 'US_CITIZEN', label: 'US CITIZEN'},
   {value: 'GREEN_CARD', label: 'GREEN CARD'},
   {value: 'NO_BORDER', label: 'NO BORDER'},
+  {value: 'WORK_AUTHORIZATON', label: 'NWORK AUTHORIZATON'},
+  {value: 'BORDER', label: 'BORDER'},
 ]
 
 const CreateOrUpdateDriverComponent: React.FC<
@@ -111,9 +113,7 @@ const CreateOrUpdateDriverComponent: React.FC<
             placeholder='Id'
             type='datetime-local'
             value={
-              isEdit
-                ? moment(formik.values.dateAvailable).format('YYYY-MM-DDTHH:mm')
-                : null
+                moment(formik.values.dateAvailable).format('YYYY-MM-DDTHH:mm')
             }
             onChange={onDateChange}
             error={
