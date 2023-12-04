@@ -8,6 +8,7 @@ import styles from './searchBox.module.scss'
 import {Dropdown, DropdownButton} from 'react-bootstrap'
 import {IDriver} from 'shared/types/api-types/driver'
 import clsx from 'clsx'
+import { MILES_FILTERS } from 'shared/constants/filters'
 
 interface ISearchBoxComponent {
   drivers: IDriver[]
@@ -38,10 +39,16 @@ const SearchBoxComponent: React.FC<ISearchBoxComponent> = (props) => {
     onMilesChange,
   } = props
 
+ 
+
   const onCopyClick =
     (driver: IDriver) =>
     (event: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
-      const text = `Rate: $\r\nMiles out: ${driver?.distance?.toFixed(2)} mi.\r\nDimension: ${driver.dimension}\r\nLocation: ${driver.locationName}`
+      const text = `Rate: $\r\nMiles out: ${driver?.distance?.toFixed(
+        2
+      )} mi.\r\nDimension: ${driver.dimension}\r\nLocation: ${
+        driver.locationName
+      }`
       navigator.clipboard.writeText(text)
     }
 
@@ -82,55 +89,16 @@ const SearchBoxComponent: React.FC<ISearchBoxComponent> = (props) => {
               menuVariant='dark'
               title={<Icon icon={ICON_COLLECTION.filter} mode={'clickable'} />}
             >
-              <Dropdown.Item
-                as={'button'}
-                onClick={onMilesChange(100)}
-                active={miles === 100}
-              >
-                100 Miles
-              </Dropdown.Item>
-              <Dropdown.Item
-                as={'button'}
-                onClick={onMilesChange(200)}
-                active={miles === 200}
-              >
-                200 Miles
-              </Dropdown.Item>
-              <Dropdown.Item
-                as={'button'}
-                onClick={onMilesChange(300)}
-                active={miles === 300}
-              >
-                300 Miles
-              </Dropdown.Item>
-              <Dropdown.Item
-                as={'button'}
-                onClick={onMilesChange(400)}
-                active={miles === 400}
-              >
-                400 Miles
-              </Dropdown.Item>
-              <Dropdown.Item
-                as={'button'}
-                onClick={onMilesChange(500)}
-                active={miles === 500}
-              >
-                500 Miles
-              </Dropdown.Item>
-              <Dropdown.Item
-                as={'button'}
-                onClick={onMilesChange(600)}
-                active={miles === 600}
-              >
-                600 Miles
-              </Dropdown.Item>
-              <Dropdown.Item
-                as={'button'}
-                onClick={onMilesChange(700)}
-                active={miles === 700}
-              >
-                700 Miles
-              </Dropdown.Item>
+              {MILES_FILTERS.map((filter) => (
+                <Dropdown.Item
+                  key={filter.value}
+                  as={'button'}
+                  onClick={onMilesChange(filter.value)}
+                  active={miles === filter.value}
+                >
+                  {filter.label}
+                </Dropdown.Item>
+              ))}
             </DropdownButton>
           </div>
           <div className={styles.searchList}>
@@ -164,7 +132,9 @@ const SearchBoxComponent: React.FC<ISearchBoxComponent> = (props) => {
                     <div className='d-flex justify-content-between flex-column align-items-end'>
                       <div>
                         <h5 className='fw-bold'>
-                          { driver.distance || driver.distance===0 ? `${driver?.distance?.toFixed(2)} mi.` :'--'}
+                          {driver.distance || driver.distance === 0
+                            ? `${driver?.distance?.toFixed(2)} mi.`
+                            : '--'}
                         </h5>
                       </div>
                       <div className={styles['driverCard--actions']}>

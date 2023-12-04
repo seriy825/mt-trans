@@ -31,6 +31,7 @@ export const Map = () => {
           findedPlace={models.findedPlace}
           drivers={models.drivers}
           searchValue={models.searchValue}
+          miles={models.milesFilter}
           bounds={models.bounds}
           onPlacesChanged={commands.onPlacesChanged}
           onSearchBarLoad={commands.onSearchBarLoad}

@@ -199,6 +199,7 @@ export const useMapPage = () => {
       theme,
       activeTheme,
       isDriversFiltering,
+      milesFilter
     },
     commands: {
       onSearchBarLoad,
