@@ -8,7 +8,6 @@ import {useMutation} from 'react-query'
 import {toast} from 'react-toastify'
 import {IDriver} from 'shared/types/api-types/driver'
 import {driverSchema} from './schema/driver-schema'
-import moment from 'moment'
 
 export const useDriversPage = () => {
   const drivers = selectDrivers()
@@ -26,11 +25,13 @@ export const useDriversPage = () => {
     onSuccess: (data: IDriver) => {
       setIsEditMode(false)
       updateDriver(data)
+      setEditableDriver(null)
       setUpdatingActiveStatusDriverId(null)
       toast.success('Driver was updated successfully!')      
     },
     onError: (error: AxiosError<{message: string}>) => {
       setIsEditMode(false)
+      setEditableDriver(null)
       setUpdatingActiveStatusDriverId(null)
       toast.error(error.response.data.message)
     },
@@ -44,10 +45,12 @@ export const useDriversPage = () => {
     onSuccess: (data: IDriver) => {
       setIsEditMode(false)
       updateDriver(data)
+      setEditableDriver(null)
       toast.success('Driver was created successfully!')
     },
     onError: (error: AxiosError<{message: string}>) => {
       setIsEditMode(false)
+      setEditableDriver(null)
       toast.error(error.response.data.message)
     },
   })
@@ -74,7 +77,7 @@ export const useDriversPage = () => {
     active: editableDriver?.active ? editableDriver.active : false,
     dateAvailable: editableDriver?.dateAvailable
       ? editableDriver.dateAvailable
-      : `${new Date()}`,
+      : null,
     id: editableDriver?.id ? editableDriver.id : null,
     name: editableDriver?.name ? editableDriver.name : '',
     owner: editableDriver?.owner ? editableDriver.owner : '',

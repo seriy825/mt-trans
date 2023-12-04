@@ -9,7 +9,6 @@ import {Dropdown, DropdownButton} from 'react-bootstrap'
 import {IDriver} from 'shared/types/api-types/driver'
 import {DistanceCalculator} from 'shared/utils/DistanceCalculator'
 import clsx from 'clsx'
-import {date} from 'yup'
 
 interface ISearchBoxComponent {
   drivers: IDriver[]
@@ -39,12 +38,6 @@ const SearchBoxComponent: React.FC<ISearchBoxComponent> = (props) => {
     onSearchClear,
     onMilesChange,
   } = props
-
-  const STATUS_COLOR = {
-    'box truck': 'success',
-    sprinter: 'primary',
-    large: 'warning',
-  }
 
   const findedPlaceLocation = findedPlace
     ? {
@@ -176,12 +169,19 @@ const SearchBoxComponent: React.FC<ISearchBoxComponent> = (props) => {
                       )}
                     </div>
                     <div className='d-flex justify-content-between flex-column align-items-end'>
-                      <h4 className='fw-bold'>
-                        {`${DistanceCalculator(
-                          {lat: driver.position[0], lng: driver.position[1]},
-                          findedPlaceLocation
-                        ).toFixed(2)} mi.`}
-                      </h4>
+                      <div>
+                        <h4 className='fw-bold'>
+                          {`${DistanceCalculator(
+                            {lat: driver.position[0], lng: driver.position[1]},
+                            findedPlaceLocation
+                          ).toFixed(2)} mi.`}
+                        </h4>
+                        <h4 className='fw-bold'>
+                            {
+
+                            }
+                        </h4>
+                      </div>
                       <div className={styles['driverCard--actions']}>
                         <Button
                           label={

@@ -1,5 +1,5 @@
 import {FormikProps} from 'formik'
-import React from 'react'
+import React, {useEffect, useState} from 'react'
 import {Form, Offcanvas} from 'react-bootstrap'
 import {Button} from 'shared/components/button/button'
 import {Icon} from 'shared/components/icon/icon'
@@ -37,7 +37,7 @@ const STATUS_OPTIONS: IOption[] = [
   {value: 'US_CITIZEN', label: 'US CITIZEN'},
   {value: 'GREEN_CARD', label: 'GREEN CARD'},
   {value: 'NO_BORDER', label: 'NO BORDER'},
-  {value: 'WORK_AUTHORIZATON', label: 'NWORK AUTHORIZATON'},
+  {value: 'WORK_AUTHORIZATON', label: 'WORK AUTHORIZATON'},
   {value: 'BORDER', label: 'BORDER'},
 ]
 
@@ -66,8 +66,14 @@ const CreateOrUpdateDriverComponent: React.FC<
     formik.setFieldValue('active', !formik.values.active)
   }
   const onDateChange = (event) => {
-    formik.setFieldValue('dateAvailable', new Date(event.target.value))
+    setDateValue(new Date(event.target.value))
   }
+  const [dateValue, setDateValue] = useState(
+    formik.values.dateAvailable ? formik.values.dateAvailable : new Date()
+  )
+  useEffect(() => {
+    formik.setFieldValue('dateAvailable', new Date(dateValue))
+  }, [dateValue])
   return (
     <Offcanvas show={isVisible} onHide={onHide} placement='end'>
       <Offcanvas.Header className='d-flex align-items-center justify-content-between'>
@@ -112,9 +118,7 @@ const CreateOrUpdateDriverComponent: React.FC<
           <Input
             placeholder='Id'
             type='datetime-local'
-            value={
-                moment(formik.values.dateAvailable).format('YYYY-MM-DDTHH:mm')
-            }
+            value={moment(dateValue).format('YYYY-MM-DDTHH:mm')}
             onChange={onDateChange}
             error={
               formik.touched.dateAvailable && !!formik.errors.dateAvailable
