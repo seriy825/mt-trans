@@ -24,12 +24,12 @@ const InfoWindowComponent: React.FC<IInfoWindowComponent> = (
       <div>
         {infoValues.map(([key, value]) => {
           const keyLabel = key[0].toUpperCase() + key.substring(1)
-          return (
+          return value ? (
             <p key={key} className='m-0 my-1'>
               <span className='fw-bold'>{`${keyLabel} `}</span>
               {value}
             </p>
-          )
+          ) : null
         })}
       </div>
     </ExternalInfoWindow>

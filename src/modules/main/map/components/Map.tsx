@@ -7,6 +7,7 @@ import {useMapPage} from '../useMapPage'
 import {CENTER_POINT} from 'shared/constants/center'
 import {ThemeDropdown} from './themeDropdown/themeDropdown'
 import {SearchBox} from './SearchBox/SearchBox'
+import { Loader } from 'shared/components/loader/loader'
 
 const containerStyle = {
   width: '100%',
@@ -18,13 +19,14 @@ export const Map = () => {
 
   return (
     <div className={styles.wrapper}>
+      {models.isDriversFiltering && <Loader/>}
       <div className='d-flex justify-content-end'>
         <ThemeDropdown
           activeTheme={models.activeTheme}
           onChangeTheme={commands.handleChangeTheme}
         />
       </div>
-      <div className={styles['google-map']}>
+      <div className={styles['google-map']}>        
         <SearchBox
           findedPlace={models.findedPlace}
           drivers={models.drivers}

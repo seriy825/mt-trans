@@ -20,7 +20,7 @@ export const useDriverState = create<IDriverState>()(
         try {
           set({isLoading: true})
           const drivers = await DriverApi.getDrivers()
-          set({drivers: drivers})
+          set({drivers: drivers.sort((a: IDriver, b: IDriver) => a.id - b.id)})
           set({isLoading: false})
         } catch (e) {
           set({isLoading: false})
@@ -34,16 +34,15 @@ export const useDriverState = create<IDriverState>()(
           const driverId = state.drivers.findIndex(
             (driver) => driver.id === updatedDriver.id
           )
-          if (driverId===-1){
+          if (driverId === -1) {
             state.drivers.push(updatedDriver)
             return state
           }
-        state.drivers.splice(driverId, 1, updatedDriver)
-        return {
+          state.drivers.splice(driverId, 1, updatedDriver)
+          return {
             ...state,
             drivers: state.drivers,
-        }
-          
+          }
         })
       },
       deleteDriver(id: number) {

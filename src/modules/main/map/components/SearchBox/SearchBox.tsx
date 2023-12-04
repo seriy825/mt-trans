@@ -1,5 +1,5 @@
-import {StandaloneSearchBox} from '@react-google-maps/api'
 import React from 'react'
+import {StandaloneSearchBox} from '@react-google-maps/api'
 import {Button} from 'shared/components/button/button'
 import {Icon} from 'shared/components/icon/icon'
 import {ICON_COLLECTION} from 'shared/components/icon/icon-list'
@@ -63,6 +63,13 @@ const SearchBoxComponent: React.FC<ISearchBoxComponent> = (props) => {
       const url = `https://t.me/${telegram}`
       window.open(url, '_blank')
     }
+
+  const distance = (driver: IDriver) => {
+    return `${DistanceCalculator(
+      {lat: driver.position[0], lng: driver.position[1]},
+      findedPlaceLocation
+    ).toFixed(2)} mi.`
+  }
 
   return (
     <StandaloneSearchBox
@@ -162,29 +169,23 @@ const SearchBoxComponent: React.FC<ISearchBoxComponent> = (props) => {
                       </p>
                       {driver.telegram && <p>Telegram: {driver.telegram}</p>}
                       {driver.note && <p>Note: {driver.note}</p>}
-                      {!driver.active && driver.dateAvailable && (
-                        <span className={styles.available}>
-                          Available:{' '}
-                          {new Date(driver.dateAvailable).toLocaleDateString(
-                            'en-us',
-                            {hour: '2-digit', minute: '2-digit'}
-                          )}
-                        </span>
-                      )}
+                      {driver.dateAvailable &&
+                        new Date(driver.dateAvailable) > new Date() && (
+                          <span className={styles.available}>
+                            Available:{' '}
+                            {new Date(driver.dateAvailable).toLocaleDateString(
+                              'en-us',
+                              {hour: '2-digit', minute: '2-digit'}
+                            )}
+                          </span>
+                        )}
                     </div>
                     <div className='d-flex justify-content-between flex-column align-items-end'>
                       <div>
-                        <h4 className='fw-bold'>
-                          {`${DistanceCalculator(
-                            {lat: driver.position[0], lng: driver.position[1]},
-                            findedPlaceLocation
-                          ).toFixed(2)} mi.`}
-                        </h4>
-                        <h4 className='fw-bold'>
-                            {
-
-                            }
-                        </h4>
+                        <h5 className='fw-bold'>
+                          {driver?.distance?.toFixed(2)} mi.
+                        </h5>
+                        <h4 className='fw-bold'>{}</h4>
                       </div>
                       <div className={styles['driverCard--actions']}>
                         <Button
