@@ -164,9 +164,8 @@ const SearchBoxComponent: React.FC<ISearchBoxComponent> = (props) => {
                     <div className='d-flex justify-content-between flex-column align-items-end'>
                       <div>
                         <h5 className='fw-bold'>
-                          {driver?.distance?.toFixed(2)} mi.
+                          { driver.distance ? `${driver?.distance?.toFixed(2)} mi.` :'--'}
                         </h5>
-                        <h4 className='fw-bold'>{}</h4>
                       </div>
                       <div className={styles['driverCard--actions']}>
                         <Button
