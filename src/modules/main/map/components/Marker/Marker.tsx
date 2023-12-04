@@ -76,7 +76,7 @@ const MarkerComponent: React.FC<IMarkerComponent> = (
           position={markerPosition}
           icon={{
             url: MARKER_STYLE['circleMarker'],
-            scaledSize: new google.maps.Size(15, 15),
+            scaledSize: new google.maps.Size(10, 10),
           }}
         />
       )

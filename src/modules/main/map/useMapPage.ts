@@ -1,5 +1,4 @@
 import {selectDrivers} from 'app/store/driver/selects'
-import { useDriverState } from 'app/store/driver/state'
 import {ChangeEvent, useMemo, useState} from 'react'
 import { THEMES, Theme } from 'shared/constants/theme'
 import { US_BOUNDS } from 'shared/constants/usBounds'
@@ -19,7 +18,6 @@ export const useMapPage = () => {
   const [searchValue, setSearchValue] = useState<string>('')
   const [findedPlace, setFindedPlace] =
     useState<google.maps.places.PlaceResult>(null)
-  const {updateDriver} = useDriverState()
   const [milesFilter,setMilesFilter] = useState<number>(null);
   const [circleOptions, setCircleOptions] = useState(null);
   const [circleCenter, setCircleCenter] = useState(null);
@@ -47,7 +45,7 @@ export const useMapPage = () => {
           lng: findedPlace.geometry.location.lng(),
         }
         const distance = DistanceCalculator({lat: driver.position[0], lng: driver.position[1]}, findedPlaceLocation)
-        return distance<=milesFilter
+        return distance<=milesFilter && driver.active
       })
     return drivers
   }, [milesFilter,findedPlace])

@@ -49,7 +49,11 @@ const SearchBoxComponent: React.FC<ISearchBoxComponent> = (props) => {
   const onCopyClick =
     (driver: IDriver) =>
     (event: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
-      const text = `Rate: $\r\nLocation: ${driver.locationName}\r\nDimension: ${driver.dimension}`
+      const distance = `${DistanceCalculator(
+        {lat: driver.position[0], lng: driver.position[1]},
+        findedPlaceLocation
+      ).toFixed(2)} mi.`
+      const text = `Rate: $\r\nMiles out: ${distance}\r\nDimension: ${driver.dimension}\r\nLocation: ${driver.locationName}`
       navigator.clipboard.writeText(text)
     }
 
