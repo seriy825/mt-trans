@@ -13,6 +13,7 @@ interface IMarkerComponent {
   marker?: IDriver
   isActive?: boolean
   position?: google.maps.LatLng | google.maps.LatLngLiteral | undefined
+  isCircleMarker?: boolean
   handleClickMarker?: (
     markerId: number
   ) => (e: google.maps.MapMouseEvent) => void
@@ -29,26 +30,36 @@ const MARKER_STYLE = {
 const MarkerComponent: React.FC<IMarkerComponent> = (
   props: IMarkerComponent
 ) => {
-  const {marker, isActive, position, handleClickMarker, handleOnCloseClick} =
-    props
+  const {
+    marker,
+    isActive,
+    position,
+    isCircleMarker,
+    handleClickMarker,
+    handleOnCloseClick,
+  } = props
   const markerPosition = marker
     ? {
         lat: marker.position[0],
         lng: marker.position[1],
       }
     : position
+
+  const getIcon = () => {
+    return new Date(marker.dateAvailable) <= new Date()
+        ? MARKER_STYLE[marker.typeCar]
+        : redMarker
+  }
+
   return (
-    marker.active && (
+    (marker &&
+    marker?.active) ? (
       <ExternalMarker
         position={markerPosition}
-        onClick={marker ? handleClickMarker(marker.id) : null}
-        cursor={marker ? 'help' : null}
+        onClick={handleClickMarker(marker.id)}
+        cursor={'help' }
         icon={{
-          url: marker
-            ? new Date(marker.dateAvailable) <= new Date()
-              ? MARKER_STYLE[marker.typeCar]
-              : redMarker
-            : MARKER_STYLE['circleMarker'],
+          url: getIcon(),
           scaledSize: new google.maps.Size(15, 15),
         }}
       >
@@ -60,7 +71,15 @@ const MarkerComponent: React.FC<IMarkerComponent> = (
           />
         )}
       </ExternalMarker>
-    )
+    ) : (isCircleMarker && 
+        <ExternalMarker
+          position={markerPosition}
+          icon={{
+            url: MARKER_STYLE['circleMarker'],
+            scaledSize: new google.maps.Size(15, 15),
+          }}
+        />
+      )
   )
 }
 

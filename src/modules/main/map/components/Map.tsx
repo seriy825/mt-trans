@@ -55,7 +55,7 @@ export const Map = () => {
                 radius={models.circle.circleRadius}
                 options={models.circle.circleOptions}
               />
-              <Marker position={models.circle.circleCenter} />
+              <Marker position={models.circle.circleCenter} isCircleMarker/>
             </>
           )}
           {models.drivers.map((driver: IDriver) => {
