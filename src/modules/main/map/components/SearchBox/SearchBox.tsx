@@ -7,7 +7,6 @@ import {Input} from 'shared/components/input/input'
 import styles from './searchBox.module.scss'
 import {Dropdown, DropdownButton} from 'react-bootstrap'
 import {IDriver} from 'shared/types/api-types/driver'
-import {DistanceCalculator} from 'shared/utils/DistanceCalculator'
 import clsx from 'clsx'
 
 interface ISearchBoxComponent {
@@ -39,21 +38,10 @@ const SearchBoxComponent: React.FC<ISearchBoxComponent> = (props) => {
     onMilesChange,
   } = props
 
-  const findedPlaceLocation = findedPlace
-    ? {
-        lat: findedPlace.geometry.location.lat(),
-        lng: findedPlace.geometry.location.lng(),
-      }
-    : null
-
   const onCopyClick =
     (driver: IDriver) =>
     (event: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
-      const distance = `${DistanceCalculator(
-        {lat: driver.position[0], lng: driver.position[1]},
-        findedPlaceLocation
-      ).toFixed(2)} mi.`
-      const text = `Rate: $\r\nMiles out: ${distance}\r\nDimension: ${driver.dimension}\r\nLocation: ${driver.locationName}`
+      const text = `Rate: $\r\nMiles out: ${driver?.distance?.toFixed(2)} mi.\r\nDimension: ${driver.dimension}\r\nLocation: ${driver.locationName}`
       navigator.clipboard.writeText(text)
     }
 
@@ -63,13 +51,6 @@ const SearchBoxComponent: React.FC<ISearchBoxComponent> = (props) => {
       const url = `https://t.me/${telegram}`
       window.open(url, '_blank')
     }
-
-  const distance = (driver: IDriver) => {
-    return `${DistanceCalculator(
-      {lat: driver.position[0], lng: driver.position[1]},
-      findedPlaceLocation
-    ).toFixed(2)} mi.`
-  }
 
   return (
     <StandaloneSearchBox
