@@ -45,7 +45,7 @@ const MarkerComponent: React.FC<IMarkerComponent> = (
         cursor={marker ? 'help' : null}
         icon={{
           url: marker
-            ? new Date(marker.dateAvailable) > new Date()
+            ? new Date(marker.dateAvailable) <= new Date()
               ? MARKER_STYLE[marker.typeCar]
               : redMarker
             : MARKER_STYLE['circleMarker'],
