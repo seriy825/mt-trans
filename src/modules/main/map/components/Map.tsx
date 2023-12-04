@@ -53,7 +53,8 @@ export const Map = () => {
         >
           {models.circle.circleCenter && (
             <>
-              <Circle
+              <Circle                
+                onClick={commands.onClickMap}
                 center={models.circle.circleCenter}
                 radius={models.circle.circleRadius}
                 options={models.circle.circleOptions}
