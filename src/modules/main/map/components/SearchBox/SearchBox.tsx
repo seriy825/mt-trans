@@ -9,6 +9,7 @@ import {Dropdown, DropdownButton} from 'react-bootstrap'
 import {IDriver} from 'shared/types/api-types/driver'
 import clsx from 'clsx'
 import { MILES_FILTERS } from 'shared/constants/filters'
+import { isValidUrl } from 'shared/helpers/validate-url-string'
 
 interface ISearchBoxComponent {
   drivers: IDriver[]
@@ -55,7 +56,7 @@ const SearchBoxComponent: React.FC<ISearchBoxComponent> = (props) => {
   const onTelegramClick =
     (telegram: string) =>
     (event: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
-      const url = `https://t.me/${telegram}`
+      const url = isValidUrl(telegram) ? telegram :`https://t.me/${telegram}`
       window.open(url, '_blank')
     }
 
