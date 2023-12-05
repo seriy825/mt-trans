@@ -64,7 +64,7 @@ export class DriverApiService {
             if (status === 'OK') {
               const distance =
                 response.routes[0].legs[0].distance.value / 1609.34
-              const hours = response.routes[0].legs[0].duration.value / 3600
+              const hours = response.routes[0].legs[0].duration.text
               if (distance <= milesFilter && driver.active) {
                 const driverWithDistance = {
                   ...driver,

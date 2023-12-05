@@ -105,7 +105,7 @@ const SearchBoxComponent: React.FC<ISearchBoxComponent> = (props) => {
             {findedPlace && drivers?.length
               ? drivers.map((driver) => (
                   <div key={driver.id} className={styles.driverCard}>
-                    <div>
+                    <div className={styles['driverCard--info']}>
                       <h5>{`${driver.id} ${driver.name}`}</h5>
                       <p className='m-0 mb-2'>
                         Location: {driver.locationName}
@@ -129,16 +129,16 @@ const SearchBoxComponent: React.FC<ISearchBoxComponent> = (props) => {
                           </span>
                         )}
                     </div>
-                    <div className='d-flex justify-content-between flex-column align-items-end'>
+                    <div className={clsx('d-flex justify-content-between flex-column align-items-end',styles['driverCard--distance'])}>
                       <div>
                         <h5 className='fw-bold'>
                           {driver.distance || driver.distance === 0
                             ? `${driver?.distance?.toFixed(2)} mi.`
                             : '--'}
                         </h5>
-                        <h5 className='fw-bold'>
-                          {driver.hours || driver.hours === 0
-                            ? `~${driver?.hours?.toFixed(2)} h.`
+                        <h5 className={clsx('fw-bold ')}>
+                          {driver.hours
+                            ? `~${driver?.hours}`
                             : '--'}
                         </h5>
                       </div>
