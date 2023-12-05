@@ -102,7 +102,7 @@ const SearchBoxComponent: React.FC<ISearchBoxComponent> = (props) => {
             </DropdownButton>
           </div>
           <div className={styles.searchList}>
-            {findedPlace && drivers.length
+            {findedPlace && drivers?.length
               ? drivers.map((driver) => (
                   <div key={driver.id} className={styles.driverCard}>
                     <div>
@@ -134,6 +134,11 @@ const SearchBoxComponent: React.FC<ISearchBoxComponent> = (props) => {
                         <h5 className='fw-bold'>
                           {driver.distance || driver.distance === 0
                             ? `${driver?.distance?.toFixed(2)} mi.`
+                            : '--'}
+                        </h5>
+                        <h5 className='fw-bold'>
+                          {driver.hours || driver.hours === 0
+                            ? `~${driver?.hours?.toFixed(2)} h.`
                             : '--'}
                         </h5>
                       </div>

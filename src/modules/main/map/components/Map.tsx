@@ -18,8 +18,7 @@ export const Map = () => {
   const {models, commands} = useMapPage()
 
   return (
-    <div className={styles.wrapper}>
-      {models.isDriversFiltering && <Loader/>}
+    <div className={styles.wrapper}>      
       <div className='d-flex justify-content-end'>
         <ThemeDropdown
           activeTheme={models.activeTheme}
@@ -27,6 +26,7 @@ export const Map = () => {
         />
       </div>
       <div className={styles['google-map']}>        
+        {models.isLoading && <Loader mode='blur'/>}
         <SearchBox
           findedPlace={models.findedPlace}
           drivers={models.drivers}
@@ -62,7 +62,7 @@ export const Map = () => {
               <Marker position={models.circle.circleCenter} isCircleMarker/>
             </>
           )}
-          {models.drivers.map((driver: IDriver) => {
+          {models.drivers?.map((driver: IDriver) => {
             return (
               <Marker
                 key={driver.id}

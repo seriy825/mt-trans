@@ -24,4 +24,5 @@ export interface IDriver {
   capacity?:number
   telegram?:string
   distance?:number
+  hours?:number
 }

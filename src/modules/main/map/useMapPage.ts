@@ -1,5 +1,8 @@
+import {DriverApi} from 'app/api/driver-api/driver-api'
 import {selectDrivers} from 'app/store/driver/selects'
-import {ChangeEvent, useEffect, useMemo, useState} from 'react'
+import {ChangeEvent, useMemo, useState} from 'react'
+import {useQuery} from 'react-query'
+import {DRIVERS_FILTER} from 'shared/constants/query-keys'
 import {THEMES, Theme} from 'shared/constants/theme'
 import {US_BOUNDS} from 'shared/constants/usBounds'
 import {LocalStorageService} from 'shared/services/local-storage-service'
@@ -8,9 +11,7 @@ import {milesToMeters} from 'shared/utils/milesToMeters'
 
 export const useMapPage = () => {
   const drivers: IDriver[] = selectDrivers()
-
-  const [filteredDrivers, setFilteredDrivers] = useState([])
-  const [isDriversFiltering, setIsDriverFiltering] = useState<boolean>(false)
+  
   const [activeTheme, setActiveTheme] = useState<Theme>(
     LocalStorageService.get('theme') || 'aubergine'
   )
@@ -24,66 +25,19 @@ export const useMapPage = () => {
   const [circleOptions, setCircleOptions] = useState(null)
   const [circleCenter, setCircleCenter] = useState(null)
   const [circleRadius, setCircleRadius] = useState(null)
-
-  useEffect(() => {
-    setIsDriverFiltering(true)
-    if (findedPlace) {
-      const findedPlaceLocation = {
-        lat: findedPlace.geometry.location.lat(),
-        lng: findedPlace.geometry.location.lng(),
-      }
-      const directionsService = new window.google.maps.DirectionsService()
-
-      const fetchFilteredDrivers = async () => {
-        const driversWithDistance = await Promise.all<IDriver>(
-          drivers.map((driver) => {
-            return new Promise(async (resolve) => {
-              const driverLocation = {
-                lat: driver.position[0],
-                lng: driver.position[1],
-              }
-
-              const request = {
-                origin: driverLocation,
-                destination: findedPlaceLocation,
-                travelMode: google.maps.TravelMode.DRIVING,
-              }
-
-              directionsService.route(request, (response, status) => {
-                if (status === 'OK') {
-                  const distance =
-                    response.routes[0].legs[0].distance.value / 1609.34 // Расстояние в милях
-                  if (distance <= milesFilter && driver.active) {
-                    const driverWithDistance = {
-                      ...driver,
-                      distance: distance, // Округляем до двух знаков после запятой
-                    }
-                    resolve(driverWithDistance)
-                  } else {
-                    resolve(null)
-                  }
-                } else {
-                  resolve(null)
-                }
-              })
-            })
-          })
-        )
-        const validDrivers = driversWithDistance.filter(
-          (driver) => driver !== null
-        )
-        const sortedDrivers = validDrivers.sort(
-          (a, b) => a.distance - b.distance
-        )
-        setFilteredDrivers(sortedDrivers)
-      }
-
-      fetchFilteredDrivers()
-    } else {
-      setFilteredDrivers(drivers)
+  const queryParams = useMemo(() => {
+    return {
+      drivers,
+      findedPlace,
+      milesFilter,
     }
-    setIsDriverFiltering(false)
-  }, [findedPlace, milesFilter, drivers])
+  }, [drivers, findedPlace, milesFilter])
+
+  const {data, isLoading} = useQuery({
+    queryKey: [DRIVERS_FILTER, queryParams],
+    queryFn: async () => await DriverApi.filterDriversByPosition(queryParams),
+    refetchOnWindowFocus: false,
+  })
 
   const theme = useMemo(() => {
     LocalStorageService.set('theme', activeTheme)
@@ -101,32 +55,6 @@ export const useMapPage = () => {
       setCircleRadius(milesToMeters(miles))
       setMilesFilter(miles)
     }
-
-  // const filteredDrivers = useMemo(() => {
-  //   if (findedPlace)
-  //     return drivers.filter((driver)=>{
-  //       const findedPlaceLocation = {
-  //         lat: findedPlace.geometry.location.lat(),
-  //         lng: findedPlace.geometry.location.lng(),
-  //       }
-  //       const directionsService = new window.google.maps.DirectionsService()
-  //       let distance = 0;
-  //       const directionResult =  directionsService.route(
-  //         {
-  //           origin: findedPlaceLocation,
-  //           destination: {lat: driver.position[0], lng: driver.position[1]},
-  //           travelMode: google.maps.TravelMode.DRIVING,
-  //         },
-  //         (req,res)=>{
-  //           // distance = res
-  //         }
-  //       )
-  //       console.log(directionResult)
-  //       // const distance = DistanceCalculator({lat: driver.position[0], lng: driver.position[1]}, findedPlaceLocation)
-  //       return distance<=milesFilter && driver.active
-  //     })
-  //   return drivers
-  // }, [milesFilter,findedPlace])
 
   const onSearchBarLoad = (ref: google.maps.places.SearchBox) => {
     setSearchBoxRef(ref)
@@ -188,7 +116,7 @@ export const useMapPage = () => {
     models: {
       activeMarker,
       searchValue,
-      drivers: filteredDrivers,
+      drivers: data,
       findedPlace,
       bounds,
       circle: {
@@ -198,8 +126,8 @@ export const useMapPage = () => {
       },
       theme,
       activeTheme,
-      isDriversFiltering,
-      milesFilter
+      isLoading,
+      milesFilter,
     },
     commands: {
       onSearchBarLoad,
