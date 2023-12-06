@@ -21,7 +21,6 @@ export const Map = () => {
   const handleZoomChanged = (map: google.maps.Map) => {
     map.addListener('zoom_changed', () => {
       const zoomLevel = map.getZoom()
-      console.log(zoomLevel)
       // Проверяем уровень зума
       if (zoomLevel > 7) {
         // Примерный уровень зума, при котором вы хотите включить отображение дорог
