@@ -15,7 +15,7 @@ const ThemeDropdownComponent: React.FC<IThemeDropdownComponent> = (
   props: IThemeDropdownComponent
 ) => {
   const {activeTheme, onChangeTheme} = props
-  const themes = Object.keys(THEMES)
+  const themes = Object.keys(THEMES).filter((theme)=>!theme.includes('WithRoads'))
   return (
     <DropdownButton
       id='dropdown-item-button'

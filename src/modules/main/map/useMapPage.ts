@@ -139,6 +139,7 @@ export const useMapPage = () => {
       onCloseClick,
       handleChangeTheme,
       onMilesChange,
+      setActiveTheme
     },
   }
 }

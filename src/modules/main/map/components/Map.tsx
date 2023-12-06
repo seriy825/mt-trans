@@ -7,26 +7,42 @@ import {useMapPage} from '../useMapPage'
 import {CENTER_POINT} from 'shared/constants/center'
 import {ThemeDropdown} from './themeDropdown/themeDropdown'
 import {SearchBox} from './SearchBox/SearchBox'
-import { Loader } from 'shared/components/loader/loader'
+import {Loader} from 'shared/components/loader/loader'
 
 const containerStyle = {
   width: '100%',
   height: '90vh',
 }
 
+const defaultZoom = 5
+
 export const Map = () => {
   const {models, commands} = useMapPage()
-
+  const handleZoomChanged = (map: google.maps.Map) => {
+    map.addListener('zoom_changed', () => {
+      const zoomLevel = map.getZoom()
+      console.log(zoomLevel)
+      // Проверяем уровень зума
+      if (zoomLevel > 7) {
+        // Примерный уровень зума, при котором вы хотите включить отображение дорог
+        // Устанавливаем тему с включенными дорогами
+        commands.handleChangeTheme(`${models.activeTheme}WithRoads}`) // Замените "themeWithRoads" на вашу тему с включенными дорогами
+      } else {
+        // Иначе оставляем тему без дорог
+        commands.handleChangeTheme(`${models.activeTheme}`)
+      }
+    })
+  }
   return (
-    <div className={styles.wrapper}>      
+    <div className={styles.wrapper}>
       <div className='d-flex justify-content-end'>
         <ThemeDropdown
           activeTheme={models.activeTheme}
           onChangeTheme={commands.handleChangeTheme}
         />
       </div>
-      <div className={styles['google-map']}>        
-        {models.isLoading && <Loader mode='blur'/>}
+      <div className={styles['google-map']}>
+        {models.isLoading && <Loader mode='blur' />}
         <SearchBox
           findedPlace={models.findedPlace}
           drivers={models.drivers}
@@ -43,23 +59,24 @@ export const Map = () => {
           mapContainerStyle={containerStyle}
           mapContainerClassName={styles['google-map']}
           center={CENTER_POINT}
-          zoom={5}
+          zoom={defaultZoom}
           options={{
             mapTypeControl: false,
             disableDefaultUI: true,
             styles: models.theme,
           }}
           onClick={commands.onClickMap}
+          onLoad={handleZoomChanged}
         >
           {models.circle.circleCenter && (
             <>
-              <Circle                
+              <Circle
                 onClick={commands.onClickMap}
                 center={models.circle.circleCenter}
                 radius={models.circle.circleRadius}
                 options={models.circle.circleOptions}
               />
-              <Marker position={models.circle.circleCenter} isCircleMarker/>
+              <Marker position={models.circle.circleCenter} isCircleMarker />
             </>
           )}
           {models.drivers?.map((driver: IDriver) => {
