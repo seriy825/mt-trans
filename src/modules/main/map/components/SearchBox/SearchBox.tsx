@@ -107,14 +107,14 @@ const SearchBoxComponent: React.FC<ISearchBoxComponent> = (props) => {
               ? drivers.map((driver) => (
                   <div key={driver.id} className={styles.driverCard}>
                     <div className={styles['driverCard--info']}>
-                      <h5>{`${driver.id} ${driver.name}`}</h5>
-                      <p className='m-0 mb-2'>
+                      <h6>{`${driver.id} ${driver.name}`}</h6>
+                      <p className='m-0'>
                         Location: {driver.locationName}
                       </p>
-                      <p className='m-0 mb-2'>Dimension: {driver.dimension}</p>
-                      <p className='m-0 mb-2'>Capacity: {driver.capacity}</p>
-                      <p className='m-0 mb-2'>Status: {driver.status}</p>
-                      <p className='m-0 mb-2'>
+                      <p className='m-0'>Dimension: {driver.dimension}</p>
+                      <p className='m-0'>Capacity: {driver.capacity}</p>
+                      <p className='m-0'>Status: {driver.status}</p>
+                      <p className='m-0'>
                         Phone: {driver.phone ? driver.phone : '---'}
                       </p>
                       {driver.telegram && <p>Telegram: {driver.telegram}</p>}
@@ -134,7 +134,7 @@ const SearchBoxComponent: React.FC<ISearchBoxComponent> = (props) => {
                       <div>
                         <h5 className='fw-bold'>
                           {driver.distance || driver.distance === 0
-                            ? `${driver?.distance?.toFixed(2)} mi.`
+                            ? `${driver?.distance.toFixed(0)} mi.`
                             : '--'}
                         </h5>
                         <h5 className={clsx('fw-bold ')}>

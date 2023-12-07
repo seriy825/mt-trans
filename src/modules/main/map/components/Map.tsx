@@ -8,7 +8,6 @@ import {CENTER_POINT} from 'shared/constants/center'
 import {ThemeDropdown} from './themeDropdown/themeDropdown'
 import {SearchBox} from './SearchBox/SearchBox'
 import {Loader} from 'shared/components/loader/loader'
-import { THEMES } from 'shared/constants/theme'
 
 const containerStyle = {
   width: '100%',
@@ -19,18 +18,7 @@ const defaultZoom = 5
 
 export const Map = () => {
   const {models, commands} = useMapPage()
-  const handleZoomChanged = (map: google.maps.Map) => {
-    map.addListener('zoom_changed', () => {
-      const zoomLevel = map.getZoom()
-      // if (zoomLevel > 7) {
-      //   map.setOptions({ styles: THEMES[`${models.activeTheme}WithRoads}`] })
-      //   commands.handleChangeTheme(`${models.activeTheme}WithRoads}`)
-      // } else {
-      //   map.setOptions({ styles: THEMES[models.activeTheme]  })
-      //   commands.handleChangeTheme(`${models.activeTheme}`)
-      // }
-    })
-  }
+
   return (
     <div className={styles.wrapper}>
       <div className='d-flex justify-content-end'>
@@ -64,7 +52,6 @@ export const Map = () => {
             styles: models.theme,
           }}
           onClick={commands.onClickMap}
-          onLoad={handleZoomChanged}
         >
           {models.circle.circleCenter && (
             <>

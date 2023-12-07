@@ -1,6 +1,6 @@
 export type DriverType = 'US CITIZEN' | 'GREEN CARD' | 'NO BORDER'
 
-export type CarType = 'box truck' | 'sprinter' | 'large'
+export type CarType = 'small straight' | 'sprinter' | 'large'
 
 export interface IPosition{
   lat:number

@@ -69,7 +69,7 @@ export const useMapPage = () => {
     if (places.length) {
       const findedPlace: google.maps.places.PlaceResult = places[0]
       setFindedPlace(findedPlace)
-      setMilesFilter(400)
+      setMilesFilter(200)
       setSearchValue(findedPlace.formatted_address)
       const placeCoords = {
         lat: findedPlace.geometry.location.lat(),
