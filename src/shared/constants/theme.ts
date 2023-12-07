@@ -1,4 +1,16 @@
-export type Theme = 'aubergine' | 'night' |'dark' | 'retro' | 'silver' | 'standart'
+export type Theme =
+  | 'aubergine'
+  | 'night'
+  | 'dark'
+  | 'retro'
+  | 'silver'
+  | 'standart'
+  | 'aubergineWithRoads'
+  | 'nightWithRoads'
+  | 'darkWithRoads'
+  | 'retroWithRoads'
+  | 'silverWithRoads'
+  | 'standartWithRoads'
 
 export const THEMES = {
   aubergine: [
@@ -319,7 +331,7 @@ export const THEMES = {
       elementType: 'geometry',
       stylers: [
         {
-          visibility:'off',
+          visibility: 'off',
           color: '#38414e',
         },
       ],
@@ -523,7 +535,7 @@ export const THEMES = {
       featureType: 'road',
       elementType: 'geometry.fill',
       stylers: [
-        {          
+        {
           color: '#2c2c2c',
         },
       ],
@@ -565,13 +577,13 @@ export const THEMES = {
       ],
     },
     {
-      featureType:'road',
-      elementType:'geometry',
-      stylers:[
+      featureType: 'road',
+      elementType: 'geometry',
+      stylers: [
         {
-          visibility:'off',
-        }
-      ]
+          visibility: 'off',
+        },
+      ],
     },
     {
       featureType: 'road.local',
@@ -708,13 +720,13 @@ export const THEMES = {
       ],
     },
     {
-      featureType:'road',
-      elementType:'geometry',
-      stylers:[
+      featureType: 'road',
+      elementType: 'geometry',
+      stylers: [
         {
-          visibility:'off',
-        }
-      ]
+          visibility: 'off',
+        },
+      ],
     },
     {
       featureType: 'road.arterial',
@@ -922,13 +934,13 @@ export const THEMES = {
       ],
     },
     {
-      featureType:'road',
-      elementType:'geometry',
-      stylers:[
+      featureType: 'road',
+      elementType: 'geometry',
+      stylers: [
         {
-          visibility:'off',
-        }
-      ]
+          visibility: 'off',
+        },
+      ],
     },
     {
       featureType: 'road.arterial',
@@ -1003,7 +1015,7 @@ export const THEMES = {
       ],
     },
   ],
-  standart:[
+  standart: [
     {
       featureType: 'administrative.country',
       elementType: 'geometry.stroke',
@@ -1036,7 +1048,7 @@ export const THEMES = {
       elementType: 'geometry',
       stylers: [
         {
-          visibility:'off'
+          visibility: 'off',
         },
       ],
     },
@@ -1561,7 +1573,7 @@ export const THEMES = {
       featureType: 'road',
       elementType: 'geometry.fill',
       stylers: [
-        {          
+        {
           color: '#2c2c2c',
         },
       ],
@@ -1603,13 +1615,13 @@ export const THEMES = {
       ],
     },
     {
-      featureType:'road',
-      elementType:'geometry',
-      stylers:[
+      featureType: 'road',
+      elementType: 'geometry',
+      stylers: [
         {
           color: '#4e4e4e',
-        }
-      ]
+        },
+      ],
     },
     {
       featureType: 'road.local',
@@ -1746,13 +1758,13 @@ export const THEMES = {
       ],
     },
     {
-      featureType:'road',
-      elementType:'geometry',
-      stylers:[
+      featureType: 'road',
+      elementType: 'geometry',
+      stylers: [
         {
-          visibility:'off',
-        }
-      ]
+          visibility: 'off',
+        },
+      ],
     },
     {
       featureType: 'road.arterial',
@@ -1960,13 +1972,13 @@ export const THEMES = {
       ],
     },
     {
-      featureType:'road',
-      elementType:'geometry',
-      stylers:[
+      featureType: 'road',
+      elementType: 'geometry',
+      stylers: [
         {
-          visibility:'off',
-        }
-      ]
+          visibility: 'off',
+        },
+      ],
     },
     {
       featureType: 'road.arterial',
@@ -2041,7 +2053,7 @@ export const THEMES = {
       ],
     },
   ],
-  standartWithRoads:[
+  standartWithRoads: [
     {
       featureType: 'administrative.country',
       elementType: 'geometry.stroke',
@@ -2074,9 +2086,9 @@ export const THEMES = {
       elementType: 'geometry',
       stylers: [
         {
-          visibility:'off'
+          visibility: 'off',
         },
       ],
     },
-  ]
+  ],
 }

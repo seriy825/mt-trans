@@ -8,6 +8,7 @@ import {CENTER_POINT} from 'shared/constants/center'
 import {ThemeDropdown} from './themeDropdown/themeDropdown'
 import {SearchBox} from './SearchBox/SearchBox'
 import {Loader} from 'shared/components/loader/loader'
+import { THEMES } from 'shared/constants/theme'
 
 const containerStyle = {
   width: '100%',
@@ -21,15 +22,13 @@ export const Map = () => {
   const handleZoomChanged = (map: google.maps.Map) => {
     map.addListener('zoom_changed', () => {
       const zoomLevel = map.getZoom()
-      // Проверяем уровень зума
-      if (zoomLevel > 7) {
-        // Примерный уровень зума, при котором вы хотите включить отображение дорог
-        // Устанавливаем тему с включенными дорогами
-        commands.handleChangeTheme(`${models.activeTheme}WithRoads}`) // Замените "themeWithRoads" на вашу тему с включенными дорогами
-      } else {
-        // Иначе оставляем тему без дорог
-        commands.handleChangeTheme(`${models.activeTheme}`)
-      }
+      // if (zoomLevel > 7) {
+      //   map.setOptions({ styles: THEMES[`${models.activeTheme}WithRoads}`] })
+      //   commands.handleChangeTheme(`${models.activeTheme}WithRoads}`)
+      // } else {
+      //   map.setOptions({ styles: THEMES[models.activeTheme]  })
+      //   commands.handleChangeTheme(`${models.activeTheme}`)
+      // }
     })
   }
   return (

@@ -1,5 +1,6 @@
 import {BaseHttpServices} from 'shared/services/base-http-services'
 import {IDriver} from 'shared/types/api-types/driver'
+import {DistanceCalculator} from 'shared/utils/DistanceCalculator'
 
 interface IFilterPayload {
   drivers: IDriver[]
@@ -41,47 +42,68 @@ export class DriverApiService {
   }: IFilterPayload) => {
     if (!findedPlace) return drivers
 
-    const directionsService = new window.google.maps.DirectionsService()
-    const driversWithDistance = await Promise.all<IDriver>(
-      drivers.map((driver) => {
-        return new Promise(async (resolve) => {
-          const driverLocation = {
-            lat: driver.position[0],
-            lng: driver.position[1],
-          }
-          const findedPlaceLocation = {
-            lat: findedPlace.geometry.location.lat(),
-            lng: findedPlace.geometry.location.lng(),
-          }
+    // const directionsService = new window.google.maps.DirectionsService()
+    // const driversWithDistance = await Promise.all<IDriver>(
+    //   drivers.map((driver) => {
+    //     return new Promise(async (resolve) => {
+    //       const driverLocation = {
+    //         lat: driver.position[0],
+    //         lng: driver.position[1],
+    //       }
+    //       const findedPlaceLocation = {
+    //         lat: findedPlace.geometry.location.lat(),
+    //         lng: findedPlace.geometry.location.lng(),
+    //       }
 
-          const request = {
-            origin: driverLocation,
-            destination: findedPlaceLocation,
-            travelMode: google.maps.TravelMode.DRIVING,
-          }
+    //       const request = {
+    //         origin: driverLocation,
+    //         destination: findedPlaceLocation,
+    //         travelMode: google.maps.TravelMode.DRIVING,
+    //       }
 
-          directionsService.route(request, (response, status) => {
-            if (status === 'OK') {
-              const distance =
-                response.routes[0].legs[0].distance.value / 1609.34
-              const hours = response.routes[0].legs[0].duration.text
-              if (distance <= milesFilter && driver.active) {
-                const driverWithDistance = {
-                  ...driver,
-                  distance: distance,
-                  hours:hours
-                }
-                resolve(driverWithDistance)
-              } else {
-                resolve(null)
-              }
-            } else {
-              resolve(null)
-            }
-          })
-        })
-      })
-    )
+    //       directionsService.route(request, (response, status) => {
+    //         if (status === 'OK') {
+    //           const distance =
+    //             response.routes[0].legs[0].distance.value / 1609.34
+    //           const hours = response.routes[0].legs[0].duration.text
+    //           if (distance <= milesFilter && driver.active) {
+    //             const driverWithDistance = {
+    //               ...driver,
+    //               distance: distance,
+    //               hours:hours
+    //             }
+    //             resolve(driverWithDistance)
+    //           } else {
+    //             resolve(null)
+    //           }
+    //         } else {
+    //           resolve(null)
+    //         }
+    //       })
+    //     })
+    //   })
+    // )
+    const driversWithDistance = drivers.map((driver) => {
+      const driverLocation = {
+        lat: driver.position[0],
+        lng: driver.position[1],
+      }
+      const findedPlaceLocation = {
+        lat: findedPlace.geometry.location.lat(),
+        lng: findedPlace.geometry.location.lng(),
+      }
+      const distanceBetween = DistanceCalculator(
+        driverLocation,
+        findedPlaceLocation
+      )
+      const driverWithDistance = {
+        ...driver,
+        distance: distanceBetween,
+      }
+      if (distanceBetween <= milesFilter && driver.active)
+        return driverWithDistance
+      return null
+    })
     const validDrivers = driversWithDistance.filter((driver) => driver !== null)
     const sortedDrivers = validDrivers.sort((a, b) => a.distance - b.distance)
     return sortedDrivers
