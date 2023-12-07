@@ -22,7 +22,7 @@
 
 .searchList {
   color: white;
-  max-height: 500px;
+  max-height: 700px;
   overflow: auto;
   &::-webkit-scrollbar {
     width: 5px;
@@ -62,7 +62,7 @@
       width: 270px;
     }
     &--distance{
-      width: 100px;
+      width: 120px;
     }
 }
 

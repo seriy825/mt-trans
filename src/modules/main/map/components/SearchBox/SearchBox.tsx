@@ -172,7 +172,7 @@ const SearchBoxComponent: React.FC<ISearchBoxComponent> = (props) => {
                             styles[`type--${driver.typeCar.replace(' ', '')}`],
                           ])}
                         >
-                          {driver.typeCar}
+                          {driver.typeCar==='box truck' ? 'Small straight' : driver.typeCar}
                         </span>
                       </div>
                     </div>
