@@ -59,7 +59,7 @@ export function Login() {
             styles.textPrimaryDark
           )}
         >
-          Al Logistics
+          MT Trans
         </h1>
       </div>
       {(formik.status || error) && (
