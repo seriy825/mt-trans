@@ -1,30 +1,25 @@
 import React from 'react'
-import {Marker as ExternalMarker} from '@react-google-maps/api'
 import {IDriver} from 'shared/types/api-types/driver'
-import greenMarker from 'assets/icons/greenMarker.png'
-import yellowMarker from 'assets/icons/yellowMarker.png'
-import redMarker from 'assets/icons/redMarker.png'
-import blueMarker from 'assets/icons/blueMarker.png'
-import circleMarker from 'assets/icons/circleMarker.png'
 import {InfoWindow} from '../InfoWindow/InfoWindow'
 import {CAR_TYPE} from 'shared/types/car'
+import {Marker as ExternalMarker} from 'react-map-gl'
+import {Icon} from 'shared/components/icon/icon'
+import {ICON_COLLECTION} from 'shared/components/icon/icon-list'
 
 interface IMarkerComponent {
   marker?: IDriver
   isActive?: boolean
-  position?: google.maps.LatLng | google.maps.LatLngLiteral | undefined
+  position?: number[]
   isCircleMarker?: boolean
-  handleClickMarker?: (
-    markerId: number
-  ) => (e: google.maps.MapMouseEvent) => void
+  handleClickMarker?: (markerId: number) => void
   handleOnCloseClick?: () => void
 }
 
 const MARKER_STYLE = {
-  [CAR_TYPE.SPRINTER]: blueMarker,
-  [CAR_TYPE.BOX_TRUCK]: greenMarker,
-  [CAR_TYPE.LARGE]: yellowMarker,
-  circleMarker: circleMarker,
+  [CAR_TYPE.SPRINTER]: <Icon icon={ICON_COLLECTION.blueMarker} />,
+  [CAR_TYPE.BOX_TRUCK]: <Icon icon={ICON_COLLECTION.greenMarker} />,
+  [CAR_TYPE.LARGE]: <Icon icon={ICON_COLLECTION.yellowMarker} />,
+  circleMarker: <Icon icon={ICON_COLLECTION.circleMarker} />,
 }
 
 const MarkerComponent: React.FC<IMarkerComponent> = (
@@ -39,47 +34,48 @@ const MarkerComponent: React.FC<IMarkerComponent> = (
     handleOnCloseClick,
   } = props
   const markerPosition = marker
-    ? {
-        lat: marker.position[0],
-        lng: marker.position[1],
-      }
+    ? [marker.position[1], marker.position[0]]
     : position
 
-  const getIcon = () => {
-    return new Date(marker.dateAvailable) <= new Date()
-        ? MARKER_STYLE[marker.typeCar]
-        : redMarker
+  const onMarkerClick = (e) => {
+    ;(e.originalEvent as Event).stopPropagation()
+    handleClickMarker(marker.id)
   }
 
-  return (
-    (marker &&
-    marker?.active) ? (
+  const MarkerIcon = isCircleMarker ? (
+    MARKER_STYLE.circleMarker
+  ) : new Date(marker.dateAvailable) <= new Date() ? (
+    MARKER_STYLE[`${marker.typeCar}`]
+  ) : (
+    <Icon icon={ICON_COLLECTION['redMarker']} />
+  )
+
+  return marker && marker?.active ? (
+    <>
       <ExternalMarker
-        position={markerPosition}
-        onClick={handleClickMarker(marker.id)}
-        cursor={'help' }
-        icon={{
-          url: getIcon(),
-          scaledSize: new google.maps.Size(15, 15),
+        longitude={marker.position[1]}
+        latitude={marker.position[0]}
+        style={{
+          cursor: 'help',
         }}
+        onClick={onMarkerClick}
       >
-        {isActive && marker && (
-          <InfoWindow
-            position={markerPosition}
-            marker={marker}
-            handleOnCloseClick={handleOnCloseClick}
-          />
-        )}
+        {MarkerIcon}
       </ExternalMarker>
-    ) : (isCircleMarker && 
-        <ExternalMarker
+      {isActive && (
+        <InfoWindow
           position={markerPosition}
-          icon={{
-            url: MARKER_STYLE['circleMarker'],
-            scaledSize: new google.maps.Size(10, 10),
-          }}
+          marker={marker}
+          handleOnCloseClick={handleOnCloseClick}
         />
-      )
+      )}
+    </>
+  ) : (
+    isCircleMarker && (
+      <ExternalMarker longitude={position[0]} latitude={position[1]}>
+        {MarkerIcon}
+      </ExternalMarker>
+    )
   )
 }
 

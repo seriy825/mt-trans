@@ -1,10 +1,53 @@
+import {MAPBOX_TOKEN} from 'shared/constants/token'
 import {BaseHttpServices} from 'shared/services/base-http-services'
 import {IDriver} from 'shared/types/api-types/driver'
-import {DistanceCalculator} from 'shared/utils/DistanceCalculator'
+import Matrix from '@mapbox/mapbox-sdk/services/matrix'
+import {Point} from '@mapbox/mapbox-sdk/services/map-matching'
+import {Coordinates} from '@mapbox/mapbox-sdk/lib/classes/mapi-request'
+
+const directionsClient = Matrix({accessToken: MAPBOX_TOKEN})
+
+interface MapboxFeatureContext {
+  id: string
+  mapbox_id: string
+  wikidata: string
+  text: string
+  short_code?: string
+}
+
+interface MapboxFeatureGeometry {
+  type: string
+  coordinates: number[]
+}
+
+interface MapboxFeatureProperties {
+  mapbox_id: string
+}
+
+export interface MapboxFeature {
+  id: string
+  type: string
+  place_type: string[]
+  relevance: number
+  properties: MapboxFeatureProperties
+  text: string
+  place_name: string
+  bbox: number[]
+  center: number[]
+  geometry: MapboxFeatureGeometry
+  context: MapboxFeatureContext[]
+}
+
+interface MapboxResponse {
+  type: string
+  query: string[]
+  features: MapboxFeature[]
+  attribution: string
+}
 
 interface IFilterPayload {
   drivers: IDriver[]
-  findedPlace: google.maps.places.PlaceResult
+  findedPlace: MapboxFeature
   milesFilter: number
 }
 
@@ -40,73 +83,57 @@ export class DriverApiService {
     findedPlace,
     milesFilter,
   }: IFilterPayload) => {
-    if (!findedPlace) return drivers
+    if (!findedPlace || !milesFilter) return drivers
 
-    // const directionsService = new window.google.maps.DirectionsService()
-    // const driversWithDistance = await Promise.all<IDriver>(
-    //   drivers.map((driver) => {
-    //     return new Promise(async (resolve) => {
-    //       const driverLocation = {
-    //         lat: driver.position[0],
-    //         lng: driver.position[1],
-    //       }
-    //       const findedPlaceLocation = {
-    //         lat: findedPlace.geometry.location.lat(),
-    //         lng: findedPlace.geometry.location.lng(),
-    //       }
+    const chunkedDrivers: IDriver[][] = []
+    const batchSize = 24
 
-    //       const request = {
-    //         origin: driverLocation,
-    //         destination: findedPlaceLocation,
-    //         travelMode: google.maps.TravelMode.DRIVING,
-    //       }
+    for (let i = 0; i < drivers.length; i += batchSize) {
+      chunkedDrivers.push(drivers.slice(i, i + batchSize))
+    }
 
-    //       directionsService.route(request, (response, status) => {
-    //         if (status === 'OK') {
-    //           const distance =
-    //             response.routes[0].legs[0].distance.value / 1609.34
-    //           const hours = response.routes[0].legs[0].duration.text
-    //           if (distance <= milesFilter && driver.active) {
-    //             const driverWithDistance = {
-    //               ...driver,
-    //               distance: distance,
-    //               hours:hours
-    //             }
-    //             resolve(driverWithDistance)
-    //           } else {
-    //             resolve(null)
-    //           }
-    //         } else {
-    //           resolve(null)
-    //         }
-    //       })
-    //     })
-    //   })
-    // )
-    const driversWithDistance = drivers.map((driver) => {
-      const driverLocation = {
-        lat: driver.position[0],
-        lng: driver.position[1],
+    const updatedDrivers = drivers.map((driver) => ({...driver}))
+
+    for (const driversChunk of chunkedDrivers) {
+      const points: Point[] = [
+        {coordinates: findedPlace.center as Coordinates},
+        ...driversChunk.map((driver: IDriver) => ({
+          coordinates: [driver.position[1], driver.position[0]] as Coordinates,
+        })),
+      ]
+
+      const response = await directionsClient
+        .getMatrix({
+          profile: 'driving',
+          points,
+          sources: [0], // Индекс источника для результата (может быть массивом индексов)
+          destinations: 'all', // Индекс пункта назначения для результата (может быть массивом индексов)
+          annotations: ['distance', 'duration'], // Включаем только аннотации расстояния
+        })
+        .send()
+
+      const responseDistances = response.body.distances[0]
+      const responseDurations = response.body.durations[0]
+
+      for (let i = 0; i < driversChunk.length; i++) {
+        updatedDrivers[drivers.indexOf(driversChunk[i])].distance =
+          responseDistances[i + 1] * 0.000621371 // Конвертировать в мили
+        updatedDrivers[drivers.indexOf(driversChunk[i])].hours =
+          responseDurations[i + 1] / 3600 // Конвертировать в мили
       }
-      const findedPlaceLocation = {
-        lat: findedPlace.geometry.location.lat(),
-        lng: findedPlace.geometry.location.lng(),
-      }
-      const distanceBetween = DistanceCalculator(
-        driverLocation,
-        findedPlaceLocation
-      )
-      const driverWithDistance = {
-        ...driver,
-        distance: distanceBetween,
-      }
-      if (distanceBetween <= milesFilter && driver.active)
-        return driverWithDistance
-      return null
-    })
-    const validDrivers = driversWithDistance.filter((driver) => driver !== null)
-    const sortedDrivers = validDrivers.sort((a, b) => a.distance - b.distance)
-    return sortedDrivers
+    }
+
+    const filteredDriver = updatedDrivers
+      .filter((driver) => driver.distance <= milesFilter && driver.active)
+      .sort((a, b) => a.distance - b.distance)
+    return filteredDriver
+  }
+
+  findPlace = async (searchValue: string): Promise<MapboxResponse> => {
+    const payload = await this.http.get(
+      `https://api.mapbox.com/geocoding/v5/mapbox.places/${searchValue}.json?country=US&types=postcode&access_token=${MAPBOX_TOKEN}`
+    )
+    return payload.data
   }
 }
 

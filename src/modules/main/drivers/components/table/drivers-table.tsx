@@ -32,7 +32,7 @@ const DriversTableComponent: React.FC<IDriversTableComponent> = (
       (driver) =>
         driver.id.toString().includes(globalFilter.toLowerCase()) || driver.name.toLowerCase().includes(globalFilter.toLowerCase())
     )
-  }, [drivers, globalFilter])
+  }, [drivers, globalFilter,updatingActiveStatusDriverId])
   return (
     <div className={styles.table}>
       <div className='d-flex align-items-center justify-content-between'>

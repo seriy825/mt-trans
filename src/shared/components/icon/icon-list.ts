@@ -11,6 +11,11 @@ import {ReactComponent as Telegram} from './collection/telegram.svg'
 import {ReactComponent as Activate} from './collection/activate.svg'
 import {ReactComponent as Deactivate} from './collection/deactivate.svg'
 import {ReactComponent as Edit} from './collection/edit.svg'
+import {ReactComponent as GreenMarker} from './collection/greenMarker.svg'
+import {ReactComponent as RedMarker} from './collection/redMarker.svg'
+import {ReactComponent as YellowMarker} from './collection/yellowMarker.svg'
+import {ReactComponent as BlueMarker} from './collection/blueMarker.svg'
+import {ReactComponent as CircleMarker} from './collection/circleMarker.svg'
 
 export const ICON_COLLECTION = {
   logo: Logo,
@@ -25,7 +30,12 @@ export const ICON_COLLECTION = {
   telegram:Telegram,
   activate:Activate,
   deactivate:Deactivate,
-  edit:Edit
+  edit:Edit,
+  greenMarker:GreenMarker,
+  redMarker:RedMarker,
+  yellowMarker:YellowMarker,
+  blueMarker:BlueMarker,
+  circleMarker:CircleMarker,
 }
 
 type Keys = keyof typeof ICON_COLLECTION

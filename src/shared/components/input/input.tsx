@@ -29,6 +29,7 @@ export interface InputProps {
     onChange?: InputHTMLAttributes<HTMLInputElement>['onChange']
     onBlur?: InputHTMLAttributes<HTMLInputElement>['onBlur']
     onFocus?: InputHTMLAttributes<HTMLInputElement>['onFocus']
+    onKeyDown?:InputHTMLAttributes<HTMLInputElement>['onKeyDown']
 }
 
 const RootInput: React.ForwardRefRenderFunction<HTMLInputElement, InputProps> = (
@@ -54,7 +55,8 @@ const RootInput: React.ForwardRefRenderFunction<HTMLInputElement, InputProps> = 
         onClick,
         onChange,
         onBlur,
-        onFocus
+        onFocus,
+        onKeyDown
     },
     ref
 ) => {
@@ -101,6 +103,7 @@ const RootInput: React.ForwardRefRenderFunction<HTMLInputElement, InputProps> = 
                     onChange={onChange}
                     onBlur={handleBlur}
                     onFocus={handleFocus}
+                    onKeyDown={onKeyDown}
                 />
                 {endAdornment && (
                     <InputGroup.Text className={clsx(styles.icon, styles.formControl)}>

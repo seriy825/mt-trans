@@ -1,32 +1,21 @@
 import React from 'react'
-import {Circle, GoogleMap} from '@react-google-maps/api'
 import styles from './map.module.scss'
 import {IDriver} from 'shared/types/api-types/driver'
 import {Marker} from './Marker/Marker'
 import {useMapPage} from '../useMapPage'
-import {CENTER_POINT} from 'shared/constants/center'
 import {ThemeDropdown} from './themeDropdown/themeDropdown'
 import {SearchBox} from './SearchBox/SearchBox'
 import {Loader} from 'shared/components/loader/loader'
+import MapBox, {Layer, Source} from 'react-map-gl'
+import {MAPBOX_TOKEN} from 'shared/constants/token'
+import mapboxgl from 'mapbox-gl'
+import {CENTER_LAT, CENTER_LNG} from 'shared/constants/center'
 
-const containerStyle = {
-  width: '100%',
-  height: '90vh',
-}
-
-const defaultZoom = 5
-
+const defaultZoom = 3.8
 export const Map = () => {
   const {models, commands} = useMapPage()
-
   return (
     <div className={styles.wrapper}>
-      <div className='d-flex justify-content-end'>
-        <ThemeDropdown
-          activeTheme={models.activeTheme}
-          onChangeTheme={commands.handleChangeTheme}
-        />
-      </div>
       <div className={styles['google-map']}>
         {models.isLoading && <Loader mode='blur' />}
         <SearchBox
@@ -34,33 +23,34 @@ export const Map = () => {
           drivers={models.drivers}
           searchValue={models.searchValue}
           miles={models.milesFilter}
-          bounds={models.bounds}
-          onPlacesChanged={commands.onPlacesChanged}
-          onSearchBarLoad={commands.onSearchBarLoad}
           onSearchChange={commands.onSearchChange}
           onSearchClear={commands.onSearchClear}
           onMilesChange={commands.onMilesChange}
+          onSearch={commands.onSearch}
         />
-        <GoogleMap
-          mapContainerStyle={containerStyle}
-          mapContainerClassName={styles['google-map']}
-          center={CENTER_POINT}
-          zoom={defaultZoom}
-          options={{
-            mapTypeControl: false,
-            disableDefaultUI: true,
-            styles: models.theme,
+        <MapBox
+          maxBounds={models.bounds}
+          mapboxAccessToken={MAPBOX_TOKEN}
+          mapLib={mapboxgl}
+          initialViewState={{
+            longitude: CENTER_LAT,
+            latitude: CENTER_LNG,
+            zoom: defaultZoom,
           }}
+          style={{width: '100%', height: '90vh'}}
+          mapStyle='mapbox://styles/mapbox/navigation-night-v1'
+          attributionControl={false}
+          reuseMaps
           onClick={commands.onClickMap}
         >
           {models.circle.circleCenter && (
             <>
-              <Circle
-                onClick={commands.onClickMap}
-                center={models.circle.circleCenter}
-                radius={models.circle.circleRadius}
-                options={models.circle.circleOptions}
-              />
+              <Source
+                type='geojson'
+                data={models.circleGeoJson}
+              >
+                <Layer {...models.circleLayer} />
+              </Source>
               <Marker position={models.circle.circleCenter} isCircleMarker />
             </>
           )}
@@ -75,7 +65,7 @@ export const Map = () => {
               />
             )
           })}
-        </GoogleMap>
+        </MapBox>
       </div>
     </div>
   )

@@ -3,6 +3,7 @@ import {createRoot} from 'react-dom/client'
 // Axios
 import {axios} from './app/config/axios/axios'
 import {QueryClient, QueryClientProvider} from 'react-query'
+import {ReactQueryDevtools} from 'react-query/devtools'
 import {BrowserRouter} from 'react-router-dom'
 import {App} from './app/App'
 import {LocalStorageService} from './shared/services/local-storage-service'
@@ -50,6 +51,7 @@ if (container) {
       <BrowserRouter>
         <App />
       </BrowserRouter>
+      <ReactQueryDevtools initialIsOpen={false} />
     </QueryClientProvider>
   )
 }

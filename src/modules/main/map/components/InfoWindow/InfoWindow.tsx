@@ -1,10 +1,10 @@
 import React from 'react'
-import {IDriver, IPosition} from 'shared/types/api-types/driver'
-import {InfoWindow as ExternalInfoWindow} from '@react-google-maps/api'
+import {IDriver} from 'shared/types/api-types/driver'
 import {FIELDS_TO_SHOW_AT_INFO} from 'shared/constants/fielsToShowAtInfo'
+import {Popup} from 'react-map-gl'
 interface IInfoWindowComponent {
   marker: IDriver
-  position: IPosition | google.maps.LatLng | google.maps.LatLngLiteral | undefined
+  position: number[]
   handleOnCloseClick: () => void
 }
 
@@ -16,14 +16,18 @@ const InfoWindowComponent: React.FC<IInfoWindowComponent> = (
     FIELDS_TO_SHOW_AT_INFO.includes(key.toLowerCase())
   )
   return (
-    <ExternalInfoWindow
-      options={{pixelOffset: new google.maps.Size(0, -20)}}
-      position={position}
-      onCloseClick={handleOnCloseClick}
+    <Popup
+      longitude={position[0]}
+      latitude={position[1]}
+      offset={5}      
+      onClose={handleOnCloseClick}
     >
       <div>
         {infoValues.map(([key, value]) => {
-          const keyLabel = key==='locationName' ? 'Location' : key[0].toUpperCase() + key.substring(1)
+          const keyLabel =
+            key === 'locationName'
+              ? 'Location'
+              : key[0].toUpperCase() + key.substring(1)
           return value ? (
             <p key={key} className='m-0 my-1'>
               <span className='fw-bold'>{`${keyLabel} `}</span>
@@ -32,7 +36,7 @@ const InfoWindowComponent: React.FC<IInfoWindowComponent> = (
           ) : null
         })}
       </div>
-    </ExternalInfoWindow>
+    </Popup>
   )
 }
 

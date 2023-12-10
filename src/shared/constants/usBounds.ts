@@ -1,6 +1,6 @@
 export const US_BOUNDS = {
-    north: 71.5388006,
-    south: 24.396308,
-    east: -66.93457,
-    west: -179.148909,
-  };
+  west: -130.0011,
+  south: 24.9493,
+  east: -66.9326,
+  north: 50.5904,  
+}
