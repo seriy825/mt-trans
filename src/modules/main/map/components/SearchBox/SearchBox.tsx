@@ -97,7 +97,8 @@ const SearchBoxComponent: React.FC<ISearchBoxComponent> = (props) => {
           </DropdownButton>
         </div>
         <div className={styles.searchList}>
-          {findedPlace && drivers?.length
+          {findedPlace ?
+           drivers?.length
             ? drivers.map((driver) => (
                 <div key={driver.id} className={styles.driverCard}>
                   <div className={styles['driverCard--info']}>
@@ -175,7 +176,7 @@ const SearchBoxComponent: React.FC<ISearchBoxComponent> = (props) => {
                   </div>
                 </div>
               ))
-            : null}
+            : <p className='p-0 m-0 d-flex align-items-center justify-content-center'>No cars founded with this filters.</p> : null}
         </div>
       </div>
     </div>
