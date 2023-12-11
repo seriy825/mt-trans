@@ -8,6 +8,7 @@ import {useMutation} from 'react-query'
 import {toast} from 'react-toastify'
 import {IDriver} from 'shared/types/api-types/driver'
 import {driverSchema} from './schema/driver-schema'
+import moment from 'moment'
 
 export const useDriversPage = () => {
   const drivers = selectDrivers()
@@ -25,6 +26,7 @@ export const useDriversPage = () => {
     onSuccess: (data: IDriver) => {
       setIsEditMode(false)
       updateDriver(data)
+      setIsCreateMode(false)
       setEditableDriver(null)
       setUpdatingActiveStatusDriverId(null)
       toast.success('Driver was updated successfully!')      
@@ -44,6 +46,7 @@ export const useDriversPage = () => {
   >(DriverApi.createDriver, {
     onSuccess: (data: IDriver) => {
       setIsEditMode(false)
+      setIsCreateMode(false)
       updateDriver(data)
       setEditableDriver(null)
       toast.success('Driver was created successfully!')
@@ -102,8 +105,8 @@ export const useDriversPage = () => {
     enableReinitialize: true,
     onSubmit: async (values, {setStatus, setSubmitting}) => {
       try {
-        if (!isEditMode) createDriverMutation.mutate(values)
-        if (!isCreateMode) updateDriverMutation.mutate(values)
+        if (!isEditMode && isCreateMode) createDriverMutation.mutate(values)
+        if (!isCreateMode && isEditMode) updateDriverMutation.mutate(values)
       } catch (error) {
         console.error(error)
         setStatus('Something is went wrong! Try again later.')
@@ -137,7 +140,7 @@ export const useDriversPage = () => {
   }
 
   const handleActivateClick = (driver:IDriver) => (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
-    const updatedDriver = {...driver,active:true}
+    const updatedDriver:IDriver = {...driver,active:true,dateAvailable:moment(new Date()).format('YYYY-MM-DDTHH:mm')}
     setUpdatingActiveStatusDriverId(driver.id)
     updateDriverMutation.mutate(updatedDriver)
   }

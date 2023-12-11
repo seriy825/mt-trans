@@ -5,6 +5,7 @@ import {DebouncedInput} from '../debouncedInput/debounced-input'
 import {Button} from 'shared/components/button/button'
 import {Icon} from 'shared/components/icon/icon'
 import {ICON_COLLECTION} from 'shared/components/icon/icon-list'
+import './drivers-table.scss'
 
 interface IDriversTableComponent {
   drivers: IDriver[] | []
@@ -49,7 +50,7 @@ const DriversTableComponent: React.FC<IDriversTableComponent> = (
           onClick={onCreateClick}
         />
       </div>
-      <table className='table table-hover table-striped table-bordered'>
+      <table className='table table-hover table-striped'>
         <thead className='table-light'>
           <tr>
             <th>Available</th>
@@ -69,7 +70,7 @@ const DriversTableComponent: React.FC<IDriversTableComponent> = (
           {filteredDrivers.length ? (
             filteredDrivers.map((driver) => (
               <tr key={driver.id}>
-                <td className='d-flex align-items-center justify-content-center'>
+                <td className='text-center'>
                   {driver.active ? (
                     <Button
                       type='button'
@@ -110,7 +111,7 @@ const DriversTableComponent: React.FC<IDriversTableComponent> = (
                     </span>
                   )}
                 </td>
-                <td className='d-flex align-items-center justify-content-center'>
+                <td className='text-center'>
                   <Button
                     type='button'
                     mode='text'

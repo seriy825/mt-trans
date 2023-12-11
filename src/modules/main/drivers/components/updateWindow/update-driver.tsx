@@ -64,6 +64,7 @@ const CreateOrUpdateDriverComponent: React.FC<
   }
   const handleToggleActive = () => {
     formik.setFieldValue('active', !formik.values.active)
+    if (!formik.values.active) setDateValue(new Date())
   }
   const onDateChange = (event) => {
     setDateValue(new Date(event.target.value))
