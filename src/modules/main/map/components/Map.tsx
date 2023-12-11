@@ -40,14 +40,12 @@ export const Map = () => {
           mapStyle='mapbox://styles/mapbox/navigation-night-v1'
           attributionControl={false}
           reuseMaps
+          dragRotate={false}
           onClick={commands.onClickMap}
         >
           {models.circle.circleCenter && (
             <>
-              <Source
-                type='geojson'
-                data={models.circleGeoJson}
-              >
+              <Source type='geojson' data={models.circleGeoJson}>
                 <Layer {...models.circleLayer} />
               </Source>
               <Marker position={models.circle.circleCenter} isCircleMarker />

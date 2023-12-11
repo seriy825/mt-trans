@@ -20,6 +20,7 @@ const InfoWindowComponent: React.FC<IInfoWindowComponent> = (
       longitude={position[0]}
       latitude={position[1]}
       offset={5}      
+      style={{zIndex:100}}
       onClose={handleOnCloseClick}
     >
       <div>
