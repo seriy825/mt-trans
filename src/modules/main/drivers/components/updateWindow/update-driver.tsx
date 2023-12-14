@@ -1,5 +1,5 @@
 import {FormikProps} from 'formik'
-import React, {useEffect, useState} from 'react'
+import React, {ChangeEvent, useMemo} from 'react'
 import {Form, Offcanvas} from 'react-bootstrap'
 import {Button} from 'shared/components/button/button'
 import {Icon} from 'shared/components/icon/icon'
@@ -54,7 +54,7 @@ const CreateOrUpdateDriverComponent: React.FC<
     onCreateOrEdit,
     onDeleteClick,
   } = props
-  
+
   const onTypeChange = (type: SingleValue<IOption>) => {
     formik.setFieldValue('typeCar', type.value)
   }
@@ -64,15 +64,14 @@ const CreateOrUpdateDriverComponent: React.FC<
   }
   const handleToggleActive = () => {
     formik.setFieldValue('active', !formik.values.active)
-    if (!formik.values.active) setDateValue(new Date())
   }
-  const onDateChange = (event) => {
-    setDateValue(new Date(event.target.value))
+  const onDateChange = (event:ChangeEvent<HTMLInputElement>) => {
     formik.setFieldValue('dateAvailable', new Date(event.target.value))
   }
-  const [dateValue, setDateValue] = useState(    
-    formik.values.dateAvailable ? formik.values.dateAvailable : new Date()
-  )
+  const dateValue = useMemo(()=>{
+    return moment(formik.values.dateAvailable || new Date()).format('YYYY-MM-DDTHH:mm')
+  },[formik.values.dateAvailable])
+
   return (
     <Offcanvas show={isVisible} onHide={onHide} placement='end'>
       <Offcanvas.Header className='d-flex align-items-center justify-content-between'>
@@ -117,7 +116,7 @@ const CreateOrUpdateDriverComponent: React.FC<
           <Input
             placeholder='Id'
             type='datetime-local'
-            value={moment(formik.values.dateAvailable || dateValue).format('YYYY-MM-DDTHH:mm')}
+            value={dateValue}
             onChange={onDateChange}
             error={
               formik.touched.dateAvailable && !!formik.errors.dateAvailable
