@@ -54,8 +54,7 @@ const CreateOrUpdateDriverComponent: React.FC<
     onCreateOrEdit,
     onDeleteClick,
   } = props
-
-  console.log(formik.values)
+  
   const onTypeChange = (type: SingleValue<IOption>) => {
     formik.setFieldValue('typeCar', type.value)
   }
