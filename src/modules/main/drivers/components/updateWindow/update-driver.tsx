@@ -55,6 +55,7 @@ const CreateOrUpdateDriverComponent: React.FC<
     onDeleteClick,
   } = props
 
+  console.log(formik.values)
   const onTypeChange = (type: SingleValue<IOption>) => {
     formik.setFieldValue('typeCar', type.value)
   }
@@ -68,13 +69,11 @@ const CreateOrUpdateDriverComponent: React.FC<
   }
   const onDateChange = (event) => {
     setDateValue(new Date(event.target.value))
+    formik.setFieldValue('dateAvailable', new Date(event.target.value))
   }
-  const [dateValue, setDateValue] = useState(
+  const [dateValue, setDateValue] = useState(    
     formik.values.dateAvailable ? formik.values.dateAvailable : new Date()
   )
-  useEffect(() => {
-    formik.setFieldValue('dateAvailable', new Date(dateValue))
-  }, [dateValue])
   return (
     <Offcanvas show={isVisible} onHide={onHide} placement='end'>
       <Offcanvas.Header className='d-flex align-items-center justify-content-between'>
@@ -119,7 +118,7 @@ const CreateOrUpdateDriverComponent: React.FC<
           <Input
             placeholder='Id'
             type='datetime-local'
-            value={moment(dateValue).format('YYYY-MM-DDTHH:mm')}
+            value={moment(formik.values.dateAvailable || dateValue).format('YYYY-MM-DDTHH:mm')}
             onChange={onDateChange}
             error={
               formik.touched.dateAvailable && !!formik.errors.dateAvailable
