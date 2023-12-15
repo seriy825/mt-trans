@@ -40,8 +40,8 @@ const SearchBoxComponent: React.FC<ISearchBoxComponent> = (props) => {
   const onCopyClick =
     (driver: IDriver) =>
     (event: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
-      const text = `Rate: $\r\nMiles out: ${driver?.distance?.toFixed(
-        2
+      const text = `Rate all in: $\r\n\r\nMC#1359081\r\nMiles out: ${driver?.distance?.toFixed(
+        0
       )} mi.\r\nDimension: ${driver.dimension}\r\nLocation: ${
         driver.locationName
       }`
