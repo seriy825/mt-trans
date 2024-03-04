@@ -29,9 +29,7 @@ export const Map = () => {
         />
         <MapBox
           maxBounds={models.bounds}
-          mapboxAccessToken={
-            'pk.eyJ1IjoiZWFzeWxvYWQ5NSIsImEiOiJjbHA3MWF2amsxeWViMmpxa3FvdDlianZzIn0.9RRmEdto3zN7i-xC6GDTvA'
-          }
+          mapboxAccessToken={MAPBOX_TOKEN}
           mapLib={mapboxgl}
           initialViewState={{
             longitude: CENTER_LAT,
