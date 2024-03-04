@@ -37,7 +37,7 @@ export const Map = () => {
             zoom: defaultZoom,
           }}
           style={{width: '100%', height: '90vh'}}
-          mapStyle='mapbox://styles/yurik007/clsj5odf800ai01qu5acjgjze'
+          mapStyle='mapbox://styles/ivanhlebov/cljhnwo69000q01o67nu73wlc'
           attributionControl={false}
           reuseMaps
           dragRotate={false}
