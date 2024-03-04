@@ -29,7 +29,9 @@ export const Map = () => {
         />
         <MapBox
           maxBounds={models.bounds}
-          mapboxAccessToken={MAPBOX_TOKEN}
+          mapboxAccessToken={
+            'pk.eyJ1IjoiZWFzeWxvYWQ5NSIsImEiOiJjbHA3MWF2amsxeWViMmpxa3FvdDlianZzIn0.9RRmEdto3zN7i-xC6GDTvA'
+          }
           mapLib={mapboxgl}
           initialViewState={{
             longitude: CENTER_LAT,
@@ -37,7 +39,8 @@ export const Map = () => {
             zoom: defaultZoom,
           }}
           style={{width: '100%', height: '90vh'}}
-          mapStyle='mapbox://styles/ivanhlebov/cljhnwo69000q01o67nu73wlc'
+          mapStyle='mapbox://styles/yurik007/clsj5odf800ai01qu5acjgjze'
+          // mapbox://styles/mapbox/navigation-night-v1
           attributionControl={false}
           reuseMaps
           dragRotate={false}
