@@ -11,6 +11,7 @@ export const DriversPage: React.FC = () => {
       <DriversTable
         updatingActiveStatusDriverId={models.updatingActiveStatusDriverId}
         drivers={models.drivers}
+        isAfterUpdate={models.isAfterUpdate}
         onActivate={commands.handleActivateClick}
         onDeactivate={commands.handleDectivateClick}
         onEditClick={commands.handleOpenEdit}

@@ -9,7 +9,8 @@ import './drivers-table.scss'
 
 interface IDriversTableComponent {
   drivers: IDriver[] | []
-  updatingActiveStatusDriverId:number
+  updatingActiveStatusDriverId: number
+  isAfterUpdate: boolean
   onActivate: (
     driver: IDriver
   ) => (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => void
@@ -25,15 +26,25 @@ interface IDriversTableComponent {
 const DriversTableComponent: React.FC<IDriversTableComponent> = (
   props: IDriversTableComponent
 ) => {
-  const {drivers, updatingActiveStatusDriverId, onActivate, onDeactivate, onEditClick, onCreateClick} = props
+  const {
+    drivers,
+    updatingActiveStatusDriverId,
+    isAfterUpdate,
+    onActivate,
+    onDeactivate,
+    onEditClick,
+    onCreateClick,
+  } = props
   const [globalFilter, setGlobalFilter] = React.useState('')
   const filteredDrivers = useMemo(() => {
     if (!globalFilter) return drivers
+
     return drivers.filter(
       (driver) =>
-        driver.id.toString().includes(globalFilter.toLowerCase()) || driver.name.toLowerCase().includes(globalFilter.toLowerCase())
+        driver.id.toString().includes(globalFilter.toLowerCase()) ||
+        driver.name.toLowerCase().includes(globalFilter.toLowerCase())
     )
-  }, [drivers, globalFilter,updatingActiveStatusDriverId])
+  }, [drivers, globalFilter, updatingActiveStatusDriverId, isAfterUpdate])
   return (
     <div className={styles.table}>
       <div className='d-flex align-items-center justify-content-between'>
@@ -77,7 +88,7 @@ const DriversTableComponent: React.FC<IDriversTableComponent> = (
                       mode='text'
                       label={<Icon icon={ICON_COLLECTION.activate} />}
                       onClick={onDeactivate(driver)}
-                      isLoading={updatingActiveStatusDriverId===driver.id}
+                      isLoading={updatingActiveStatusDriverId === driver.id}
                     />
                   ) : (
                     <Button
@@ -85,7 +96,7 @@ const DriversTableComponent: React.FC<IDriversTableComponent> = (
                       mode='text'
                       label={<Icon icon={ICON_COLLECTION.deactivate} />}
                       onClick={onActivate(driver)}
-                      isLoading={updatingActiveStatusDriverId===driver.id}
+                      isLoading={updatingActiveStatusDriverId === driver.id}
                     />
                   )}
                 </td>

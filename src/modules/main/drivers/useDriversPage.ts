@@ -1,5 +1,5 @@
 import {DriverApi} from 'app/api/driver-api/driver-api'
-import {selectDrivers} from 'app/store/driver/selects'
+import {selectDrivers, selectIsAfterUpdate} from 'app/store/driver/selects'
 import {useDriverState} from 'app/store/driver/state'
 import {AxiosError} from 'axios'
 import {FormikProps, useFormik} from 'formik'
@@ -15,8 +15,10 @@ export const useDriversPage = () => {
   const [isEditMode, setIsEditMode] = useState(false)
   const [isCreateMode, setIsCreateMode] = useState(false)
   const [editableDriver, setEditableDriver] = useState<IDriver | null>(null)
-  const {updateDriver,deleteDriver} = useDriverState()
-  const [updatingActiveStatusDriverId,setUpdatingActiveStatusDriverId] = useState<number>(null)
+  const {updateDriver, deleteDriver} = useDriverState()
+  const [updatingActiveStatusDriverId, setUpdatingActiveStatusDriverId] =
+    useState<number>(null)
+  const isAfterUpdate = selectIsAfterUpdate()
 
   const updateDriverMutation = useMutation<
     IDriver,
@@ -29,7 +31,7 @@ export const useDriversPage = () => {
       setIsCreateMode(false)
       setEditableDriver(null)
       setUpdatingActiveStatusDriverId(null)
-      toast.success('Driver was updated successfully!')      
+      toast.success('Driver was updated successfully!')
     },
     onError: (error: AxiosError<{message: string}>) => {
       setIsEditMode(false)
@@ -135,21 +137,29 @@ export const useDriversPage = () => {
     setIsCreateMode(false)
   }
 
-  const handleDeleteClick = () => {    
+  const handleDeleteClick = () => {
     deleteDriverMutation.mutate(editableDriver.id)
   }
 
-  const handleActivateClick = (driver:IDriver) => (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
-    const updatedDriver:IDriver = {...driver,active:true,dateAvailable:moment(new Date()).format('YYYY-MM-DDTHH:mm')}
-    setUpdatingActiveStatusDriverId(driver.id)
-    updateDriverMutation.mutate(updatedDriver)
-  }
+  const handleActivateClick =
+    (driver: IDriver) =>
+    (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
+      const updatedDriver: IDriver = {
+        ...driver,
+        active: true,
+        dateAvailable: moment(new Date()).format('YYYY-MM-DDTHH:mm'),
+      }
+      setUpdatingActiveStatusDriverId(driver.id)
+      updateDriverMutation.mutate(updatedDriver)
+    }
 
-  const handleDectivateClick = (driver:IDriver) => (e: React.MouseEvent<HTMLButtonElement, MouseEvent>)=> {
-    const updatedDriver = {...driver,active:false}
-    setUpdatingActiveStatusDriverId(driver.id)
-    updateDriverMutation.mutate(updatedDriver)
-  }
+  const handleDectivateClick =
+    (driver: IDriver) =>
+    (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
+      const updatedDriver = {...driver, active: false}
+      setUpdatingActiveStatusDriverId(driver.id)
+      updateDriverMutation.mutate(updatedDriver)
+    }
 
   const isLoading =
     createDriverMutation.isLoading || updateDriverMutation.isLoading
@@ -163,7 +173,8 @@ export const useDriversPage = () => {
       isLoading,
       formik,
       updatingActiveStatusDriverId,
-      isDeleting:deleteDriverMutation.isLoading
+      isDeleting: deleteDriverMutation.isLoading,
+      isAfterUpdate,
     },
     commands: {
       handleOpenEdit,
@@ -172,7 +183,7 @@ export const useDriversPage = () => {
       createClick,
       handleDeleteClick,
       handleActivateClick,
-      handleDectivateClick
+      handleDectivateClick,
     },
   }
 }

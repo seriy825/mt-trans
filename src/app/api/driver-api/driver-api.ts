@@ -85,48 +85,89 @@ export class DriverApiService {
   }: IFilterPayload) => {
     if (!findedPlace || !milesFilter) return drivers
 
-    const chunkedDrivers: IDriver[][] = []
-    const batchSize = 24
+    const updatedDrivers = drivers.filter(
+      ({position, active}) =>
+        (position[1] - findedPlace.center[0]) *
+          (position[1] - findedPlace.center[0]) +
+          (position[0] - findedPlace.center[1]) *
+            (position[0] - findedPlace.center[1]) <=
+          Math.pow(((milesFilter + 1) / 100) * 1.3, 2) && active
+    )
 
-    for (let i = 0; i < drivers.length; i += batchSize) {
-      chunkedDrivers.push(drivers.slice(i, i + batchSize))
-    }
+    if (updatedDrivers.length > 24) {
+      const chunkedDrivers: IDriver[][] = []
+      const batchSize = 24
 
-    const updatedDrivers = drivers.map((driver) => ({...driver}))
-
-    for (const driversChunk of chunkedDrivers) {
-      const points: Point[] = [
-        {coordinates: findedPlace.center as Coordinates},
-        ...driversChunk.map((driver: IDriver) => ({
-          coordinates: [driver.position[1], driver.position[0]] as Coordinates,
-        })),
-      ]
-
-      const response = await directionsClient
-        .getMatrix({
-          profile: 'driving',
-          points,
-          sources: [0], // Индекс источника для результата (может быть массивом индексов)
-          destinations: 'all', // Индекс пункта назначения для результата (может быть массивом индексов)
-          annotations: ['distance', 'duration'], // Включаем только аннотации расстояния
-        })
-        .send()
-
-      const responseDistances = response.body.distances[0]
-      const responseDurations = response.body.durations[0]
-
-      for (let i = 0; i < driversChunk.length; i++) {
-        updatedDrivers[drivers.indexOf(driversChunk[i])].distance =
-          responseDistances[i + 1] * 0.000621371 // Конвертировать в мили
-        updatedDrivers[drivers.indexOf(driversChunk[i])].hours =
-          responseDurations[i + 1] / 3600 // Конвертировать в мили
+      for (let i = 0; i < updatedDrivers.length; i += batchSize) {
+        chunkedDrivers.push(updatedDrivers.slice(i, i + batchSize))
       }
+
+      for (const driversChunk of chunkedDrivers) {
+        const points: Point[] = [
+          {coordinates: findedPlace.center as Coordinates},
+          ...driversChunk.map((driver: IDriver) => ({
+            coordinates: [
+              driver.position[1],
+              driver.position[0],
+            ] as Coordinates,
+          })),
+        ]
+
+        const response = await directionsClient
+          .getMatrix({
+            profile: 'driving',
+            points,
+            sources: [0], // Индекс источника для результата (может быть массивом индексов)
+            destinations: 'all', // Индекс пункта назначения для результата (может быть массивом индексов)
+            annotations: ['distance', 'duration'], // Включаем только аннотации расстояния
+          })
+          .send()
+
+        const responseDistances = response.body.distances[0]
+        const responseDurations = response.body.durations[0]
+
+        for (let i = 0; i < driversChunk.length; i++) {
+          updatedDrivers[updatedDrivers.indexOf(driversChunk[i])].distance =
+            responseDistances[i + 1] * 0.000621371 // Конвертировать в мили
+          updatedDrivers[updatedDrivers.indexOf(driversChunk[i])].hours =
+            responseDurations[i + 1] / 3600 // Конвертировать в часы
+        }
+      }
+      const filteredDrivers = updatedDrivers.sort(
+        (a, b) => a.distance - b.distance
+      )
+      return filteredDrivers
     }
 
-    const filteredDriver = updatedDrivers
-      .filter((driver) => driver.distance <= milesFilter && driver.active)
+    const points: Point[] = [
+      {coordinates: findedPlace.center as Coordinates},
+      ...updatedDrivers.map((driver: IDriver) => ({
+        coordinates: [driver.position[1], driver.position[0]] as Coordinates,
+      })),
+    ]
+    const response = await directionsClient
+      .getMatrix({
+        profile: 'driving',
+        points,
+        sources: [0], // Индекс источника для результата (может быть массивом индексов)
+        destinations: 'all', // Индекс пункта назначения для результата (может быть массивом индексов)
+        annotations: ['distance', 'duration'], // Включаем только аннотации расстояния
+      })
+      .send()
+
+    const responseDistances = response.body.distances[0]
+    const responseDurations = response.body.durations[0]
+
+    const filteredDrivers = updatedDrivers
+      .map((driver, idx) => {
+        return {
+          ...driver,
+          distance: responseDistances[idx + 1] * 0.000621371,
+          hours: responseDurations[idx + 1] / 3600,
+        }
+      })
       .sort((a, b) => a.distance - b.distance)
-    return filteredDriver
+    return filteredDrivers
   }
 
   findPlace = async (searchValue: string): Promise<MapboxResponse> => {

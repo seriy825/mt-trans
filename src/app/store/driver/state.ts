@@ -6,6 +6,7 @@ import {devtools} from 'zustand/middleware'
 interface IDriverState {
   drivers: IDriver[] | null
   isLoading: boolean
+  isAfterUpdate: boolean
   getDrivers: () => void
   updateDriver: (driver: IDriver) => void
   deleteDriver: (id: number) => void
@@ -16,6 +17,7 @@ export const useDriverState = create<IDriverState>()(
     (set) => ({
       drivers: [],
       isLoading: false,
+      isAfterUpdate: false,
       getDrivers: async function () {
         try {
           set({isLoading: true})
@@ -38,6 +40,7 @@ export const useDriverState = create<IDriverState>()(
             state.drivers.push(updatedDriver)
             return state
           }
+          state.isAfterUpdate = !state.isAfterUpdate
           state.drivers.splice(driverId, 1, updatedDriver)
           return {
             ...state,
@@ -49,6 +52,7 @@ export const useDriverState = create<IDriverState>()(
         set((state) => {
           const driverId = state.drivers.findIndex((driver) => driver.id === id)
           state.drivers.splice(driverId, 1)
+          state.isAfterUpdate = !state.isAfterUpdate
           return {
             ...state,
             drivers: state.drivers,

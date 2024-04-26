@@ -65,12 +65,14 @@ const CreateOrUpdateDriverComponent: React.FC<
   const handleToggleActive = () => {
     formik.setFieldValue('active', !formik.values.active)
   }
-  const onDateChange = (event:ChangeEvent<HTMLInputElement>) => {
+  const onDateChange = (event: ChangeEvent<HTMLInputElement>) => {
     formik.setFieldValue('dateAvailable', new Date(event.target.value))
   }
-  const dateValue = useMemo(()=>{
-    return moment(formik.values.dateAvailable || new Date()).format('YYYY-MM-DDTHH:mm')
-  },[formik.values.dateAvailable])
+  const dateValue = useMemo(() => {
+    return moment(formik.values.dateAvailable || new Date()).format(
+      'YYYY-MM-DDTHH:mm'
+    )
+  }, [formik.values.dateAvailable])
 
   return (
     <Offcanvas show={isVisible} onHide={onHide} placement='end'>
@@ -111,21 +113,23 @@ const CreateOrUpdateDriverComponent: React.FC<
             setActive={handleToggleActive}
           />
         </div>
-        <div className='mb-2'>
-          <label>Date available</label>
-          <Input
-            placeholder='Id'
-            type='datetime-local'
-            value={dateValue}
-            onChange={onDateChange}
-            error={
-              formik.touched.dateAvailable && !!formik.errors.dateAvailable
-            }
-            errorText={
-              formik.touched.dateAvailable && formik.errors.dateAvailable
-            }
-          />
-        </div>
+        {!formik.values.active && (
+          <div className='mb-2'>
+            <label>Date available</label>
+            <Input
+              placeholder='Id'
+              type='datetime-local'
+              value={dateValue}
+              onChange={onDateChange}
+              error={
+                formik.touched.dateAvailable && !!formik.errors.dateAvailable
+              }
+              errorText={
+                formik.touched.dateAvailable && formik.errors.dateAvailable
+              }
+            />
+          </div>
+        )}
         <div className='mb-2'>
           <label>Id</label>
           <Input
