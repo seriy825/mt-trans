@@ -1,0 +1,11 @@
+.modal-body {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 100%;
+  max-width: 600px;
+  background: linear-gradient(0deg, #ffffff, #ffffff), #f3f5f7;
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.15);
+  border-radius: 10px;
+}

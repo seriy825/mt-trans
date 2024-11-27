@@ -14,6 +14,7 @@ interface IDriversTableComponent {
   onActivate: (
     driver: IDriver
   ) => (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => void
+  onDeactivateAll: () => void
   onDeactivate: (
     driver: IDriver
   ) => (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => void
@@ -31,6 +32,7 @@ const DriversTableComponent: React.FC<IDriversTableComponent> = (
     updatingActiveStatusDriverId,
     isAfterUpdate,
     onActivate,
+    onDeactivateAll,
     onDeactivate,
     onEditClick,
     onCreateClick,
@@ -54,12 +56,21 @@ const DriversTableComponent: React.FC<IDriversTableComponent> = (
           className='p-1 font-lg shadow border border-block w-25'
           placeholder='Search by id or name...'
         />
-        <Button
-          label='Create'
-          type='button'
-          mode='text'
-          onClick={onCreateClick}
-        />
+        <div className="d-flex align-items-center gap-5">
+          <Button
+            label='Deactivate all'
+            type='button'
+            mainButton
+            mode='remove'
+            onClick={onDeactivateAll}
+          />
+          <Button
+            label='Create'
+            type='button'
+            mode='text'
+            onClick={onCreateClick}
+          />
+        </div>
       </div>
       <table className='table table-hover table-striped'>
         <thead className='table-light'>

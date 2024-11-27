@@ -9,12 +9,15 @@ import {toast} from 'react-toastify'
 import {IDriver} from 'shared/types/api-types/driver'
 import {driverSchema} from './schema/driver-schema'
 import moment from 'moment'
+import {useModalManager} from 'shared/context/modal-manager'
+import {CONFIRM_DEACTIVATE_ALL_MODAL} from 'shared/constants/modal-names'
 
 export const useDriversPage = () => {
   const drivers = selectDrivers()
   const [isEditMode, setIsEditMode] = useState(false)
   const [isCreateMode, setIsCreateMode] = useState(false)
   const [editableDriver, setEditableDriver] = useState<IDriver | null>(null)
+  const modalManager = useModalManager()
   const {updateDriver, deleteDriver} = useDriverState()
   const [updatingActiveStatusDriverId, setUpdatingActiveStatusDriverId] =
     useState<number>(null)
@@ -141,6 +144,10 @@ export const useDriversPage = () => {
     deleteDriverMutation.mutate(editableDriver.id)
   }
 
+  const handleDeactivateAllClick = () => {
+    modalManager.open(CONFIRM_DEACTIVATE_ALL_MODAL)
+  }
+
   const handleActivateClick =
     (driver: IDriver) =>
     (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
@@ -184,6 +191,7 @@ export const useDriversPage = () => {
       handleDeleteClick,
       handleActivateClick,
       handleDectivateClick,
+      handleDeactivateAllClick,
     },
   }
 }

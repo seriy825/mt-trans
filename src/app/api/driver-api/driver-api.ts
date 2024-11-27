@@ -73,6 +73,11 @@ export class DriverApiService {
     return payload.data
   }
 
+  deactivateAllDrivers = async (): Promise<boolean> => {
+    const payload = await this.http.post(`/drivers/deactivateAll`)
+    return payload.data
+  }
+
   deleteDriver = async (driverId: number): Promise<void> => {
     const payload = await this.http.delete(`/drivers/${driverId}`)
     return payload.data

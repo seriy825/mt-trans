@@ -8,6 +8,7 @@ import {BrowserRouter} from 'react-router-dom'
 import {App} from './app/App'
 import {LocalStorageService} from './shared/services/local-storage-service'
 import {useAuthState} from './app/store/auth/state'
+import {ModalManager} from 'shared/context/modal-manager'
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -47,11 +48,13 @@ if (container) {
   })()
 
   createRoot(container).render(
-    <QueryClientProvider client={queryClient}>
-      <BrowserRouter>
-        <App />
-      </BrowserRouter>
-      <ReactQueryDevtools initialIsOpen={false} />
-    </QueryClientProvider>
+    <ModalManager.Provider>
+      <QueryClientProvider client={queryClient}>
+        <BrowserRouter>
+          <App />
+        </BrowserRouter>
+        <ReactQueryDevtools initialIsOpen={false} />
+      </QueryClientProvider>
+    </ModalManager.Provider>
   )
 }

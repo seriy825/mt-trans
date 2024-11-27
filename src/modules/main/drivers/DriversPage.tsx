@@ -2,6 +2,7 @@ import React from 'react'
 import {DriversTable} from './components/table/drivers-table'
 import {useDriversPage} from './useDriversPage'
 import {CreateOrUpdateDriver} from './components/updateWindow/update-driver'
+import { ConfirmModal } from './components/confim-modal/confirm-modal'
 
 export const DriversPage: React.FC = () => {
   const {models, commands} = useDriversPage()
@@ -13,6 +14,7 @@ export const DriversPage: React.FC = () => {
         drivers={models.drivers}
         isAfterUpdate={models.isAfterUpdate}
         onActivate={commands.handleActivateClick}
+        onDeactivateAll={commands.handleDeactivateAllClick}
         onDeactivate={commands.handleDectivateClick}
         onEditClick={commands.handleOpenEdit}
         onCreateClick={commands.handleOpenCreate}
@@ -27,6 +29,7 @@ export const DriversPage: React.FC = () => {
         isLoading={models.isLoading}
         isDeleting={models.isDeleting}
       />
+      <ConfirmModal />
     </>
   )
 }
