@@ -17,9 +17,12 @@
     "axios": "^1.6.2",
     "bootstrap": "^5.3.2",
     "clsx": "^2.0.0",
+    "express": "^5.1.0",
+    "express-favicon": "^2.0.4",
     "formik": "^2.4.5",
     "mapbox-gl": "^3.0.0",
     "moment": "^2.29.4",
+    "path": "^0.12.7",
     "postcss-loader": "^7.3.3",
     "prettier": "^3.1.0",
     "react": "^18.2.0",
@@ -40,7 +43,7 @@
     "zustand": "^4.4.6"
   },
   "scripts": {
-    "start": "react-scripts start",
+    "start": "node server.js",
     "build": "react-scripts build",
     "postinstall": "npm run build",
     "heroku-postbuild": "npm run build",
