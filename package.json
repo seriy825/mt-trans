@@ -43,7 +43,7 @@
     "zustand": "^4.4.6"
   },
   "scripts": {
-    "start": "node server.js",
+    "start": "react-scripts start",
     "build": "react-scripts build",
     "postinstall": "npm run build",
     "heroku-postbuild": "npm run build",
